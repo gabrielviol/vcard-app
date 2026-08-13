@@ -9,7 +9,7 @@ Requisitos da primeira release. Cada um mapeia para uma fase do roadmap.
 
 ### Marca (BRAND)
 
-Nome e domínio saíram de "pendência" para caminho crítico quando a Fase 5 (marca + intenção de upgrade) entrou na v1 — o rodapé do plano grátis não existe sem marca.
+Nome e domínio saíram de "pendência" para caminho crítico quando marca + intenção de upgrade entraram na v1 — o rodapé do plano grátis não existe sem marca.
 
 - [ ] **BRAND-01**: Produto tem nome definido e domínio registrado, apontando para o frontend em produção
 - [ ] **BRAND-02**: Cartão do plano grátis exibe a marca do produto no rodapé, com link para a home do produto (`is_branded`)
@@ -129,13 +129,55 @@ Preenchido durante a criação do roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (pendente — roadmapper preenche) | | |
+| ACCT-01 | Phase 1 | Pending |
+| ACCT-02 | Phase 1 | Pending |
+| ACCT-03 | Phase 1 | Pending |
+| ACCT-04 | Phase 1 | Pending |
+| ACCT-05 | Phase 1 | Pending |
+| CARD-01 | Phase 1 | Pending |
+| CARD-02 | Phase 1 | Pending |
+| CARD-03 | Phase 1 | Pending |
+| CARD-04 | Phase 1 | Pending |
+| CARD-05 | Phase 1 | Pending |
+| CARD-06 | Phase 1 | Pending |
+| CARD-07 | Phase 1 | Pending |
+| CARD-08 | Phase 1 | Pending |
+| CARD-09 | Phase 1 | Pending |
+| CARD-10 | Phase 1 | Pending |
+| PUB-01 | Phase 2 | Pending |
+| PUB-02 | Phase 2 | Pending |
+| PUB-03 | Phase 2 | Pending |
+| PUB-04 | Phase 2 | Pending |
+| PUB-05 | Phase 2 | Pending |
+| PUB-06 | Phase 2 | Pending |
+| SHARE-01 | Phase 2 | Pending |
+| SHARE-02 | Phase 2 | Pending |
+| BRAND-01 | Phase 2 | Pending |
+| CONT-01 | Phase 3 | Pending |
+| CONT-02 | Phase 3 | Pending |
+| CONT-03 | Phase 3 | Pending |
+| CONT-04 | Phase 3 | Pending |
+| CONT-05 | Phase 3 | Pending |
+| PAY-01 | Phase 3 | Pending |
+| PAY-02 | Phase 3 | Pending |
+| PAY-03 | Phase 3 | Pending |
+| SHARE-03 | Phase 3 | Pending |
+| SHARE-04 | Phase 3 | Pending |
+| SHARE-05 | Phase 3 | Pending |
+| SHARE-06 | Phase 3 | Pending |
+| VIEW-01 | Phase 4 | Pending |
+| VIEW-02 | Phase 4 | Pending |
+| VIEW-03 | Phase 4 | Pending |
+| BRAND-02 | Phase 4 | Pending |
+| UPG-01 | Phase 4 | Pending |
+| UPG-02 | Phase 4 | Pending |
+| UPG-03 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 43 total
-- Mapped to phases: 0
-- Unmapped: 43 ⚠️
+- Mapped to phases: 43
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-08-13*
-*Last updated: 2026-08-13 after initial definition*
+*Last updated: 2026-08-13 after roadmap creation*
