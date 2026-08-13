@@ -50,6 +50,13 @@ Alguém recebe o cartão (por QR ou link) e consegue **te chamar ou te pagar em 
 - `is_branded` é o motor do freemium (padrão Linktree): grátis mostra a marca, pago remove. A marca visível também é distribuição orgânica — cada cartão gratuito compartilhado expõe o produto a quem recebe.
 - `CardView` é o gancho de upgrade — "veja de onde vêm suas visitas" é o que justifica o plano pago.
 
+**Concorrência brasileira (achado da pesquisa, 2026-08-13).** O enquadramento inicial deste documento assumia que a lacuna era só contra os players americanos. A pesquisa encontrou concorrência brasileira direta e mais madura que o esperado:
+
+- **Monocard** — se posiciona como "a plataforma #1 de cartão de visita digital no Brasil", já tem Pix nativo, cobra R$9,90/mês (o mesmo patamar planejado aqui) e declara freelancers/autônomos como público. A diferença que sobrevive: trata WhatsApp como mais um módulo entre outros, não como CTA central, e o modelo de negócio empurra para hardware NFC físico + CRM empresarial.
+- **InfinitePay Link na Bio** — fintech grande, bio-link grátis com Pix nativo, mas sem identidade de cartão profissional (nome/cargo/foto). É vitrine de vendas, não cartão de visita.
+
+**Consequência para o posicionamento:** o diferencial a comunicar não é "ter Pix no Brasil primeiro" — essa vantagem não existe mais. É **WhatsApp como CTA central + simplicidade radical** (sem hardware, sem CRM, sem múltiplos perfis), voltado ao autônomo solo. Nenhum concorrente pesquisado, brasileiro ou internacional, combina essas três coisas.
+
 **Como o cartão chega em quem recebe.** Quatro caminhos, todos válidos: QR na tela do celular em encontro presencial, QR impresso (adesivo, cartão de papel, vidro da loja), link mandado no WhatsApp, e link na bio do Instagram. O canal do WhatsApp implica que o preview do link (OG image) é metade da primeira impressão — se vier quebrado, a pessoa não clica.
 
 **Especificações já escritas.** `docs/specs/01-setup.md` (monorepo Next.js App Router + .NET minimal API + Postgres, schema de 4 tabelas, Docker Compose local, deploy Vercel/Render/Neon) e `docs/specs/02-autentication.md` (JWT Bearer, BCrypt, register/login/me). Ambas devem ser tratadas como decisões tomadas, não como sugestões.
