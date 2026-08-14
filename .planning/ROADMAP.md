@@ -39,7 +39,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 **Wave 1**
 
-- [ ] 01-01-PLAN.md — Esqueleto: apps/api, Postgres migrado, cadastro/login/JWT reais
+- [x] 01-01-PLAN.md — Esqueleto: apps/api, Postgres migrado, cadastro/login/JWT reais
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conta e Cartão | 0/7 | Planned | - |
+| 1. Conta e Cartão | 1/7 | In Progress|  |
 | 2. Cartão Público no Ar | 0/TBD | Not started | - |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |

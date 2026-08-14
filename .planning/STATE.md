@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 1 UI-SPEC approved
-last_updated: "2026-08-14T00:44:32.699Z"
-last_activity: 2026-08-14 -- Phase 01 planning complete
+last_updated: "2026-08-14T01:19:07.430Z"
+last_activity: 2026-08-14 -- Phase 01 execution started
 progress:
   total_phases: 4
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-13)
 
 **Core value:** Alguém recebe o cartão (por QR ou link) e consegue te chamar ou te pagar em um toque — sem sair da página, sem digitar nada, sem etapa intermediária.
-**Current focus:** Phase 1 — Conta e Cartão
+**Current focus:** Phase 01 — conta-e-cart-o
 
 ## Current Position
 
-Phase: 1 of 4 (Conta e Cartão)
-Plan: 0 of TBD in current phase
-Status: Ready to execute
-Last activity: 2026-08-14 -- Phase 01 planning complete
+Phase: 01 (conta-e-cart-o) — EXECUTING
+Plan: 1 of 7
+Status: Executing Phase 01
+Last activity: 2026-08-14 -- Phase 01 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
