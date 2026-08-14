@@ -22,6 +22,14 @@ public static class SocialLinkEndpoints
         if (userId is null)
             return Results.Unauthorized();
 
+        // Trava a linha do cartao (SELECT ... FOR UPDATE) para serializar criacoes
+        // concorrentes de social link do MESMO cartao (WR-04) -- sem isso, duas
+        // requisicoes concorrentes podem ler o mesmo snapshot de SocialLinks.Count e
+        // persistir o mesmo display_order. A segunda transacao so le o cartao (e a
+        // contagem atual de links) depois que a primeira libera a trava ao commitar.
+        await using var tx = await db.Database.BeginTransactionAsync();
+        await db.Database.ExecuteSqlInterpolatedAsync($"SELECT 1 FROM cards WHERE id = {cardId} FOR UPDATE");
+
         var card = await db.Cards
             .Include(c => c.SocialLinks)
             .FirstOrDefaultAsync(c => c.Id == cardId);
@@ -50,6 +58,7 @@ public static class SocialLinkEndpoints
 
         db.SocialLinks.Add(link);
         await db.SaveChangesAsync();
+        await tx.CommitAsync();
 
         return Results.Created($"/cards/{cardId}/social-links/{link.Id}", ToResponseDto(link));
     }
