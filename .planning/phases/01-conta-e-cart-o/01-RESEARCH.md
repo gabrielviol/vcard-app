@@ -534,22 +534,25 @@ export function normalizeWhatsapp(raw: string): string {
 
 **If this table is empty:** N/A — see entries above; several claims need confirmation before being treated as locked fact, especially A1 (reserved slugs) and A2 (DDD whitelist), both of which affect user-visible correctness (CARD-02, CARD-08).
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does the alphanumeric CNPJ format need a specific test fixture in Wave 0?**
    - What we know: `cpf-cnpj-validator@2.1.2`'s README documents support for `12.ABC.345/01DE-35`-style values.
    - What's unclear: Whether `cnpj.isValid()` was exercised against a real, RFB-published alphanumeric CNPJ test vector, or only against the library author's own synthetic examples.
    - Recommendation: Add one alphanumeric CNPJ test case in Wave 0 tests (`tests/pix-validation.test.ts`) using whatever official example the RFB technical note publishes, if available; otherwise flag as best-effort.
+   - **RESOLVED:** Yes — plan `01-05`, Task 1, action step 3 adds an alphanumeric CNPJ case (`12.ABC.345/01DE-35` shape) to `apps/web/lib/pix-validation.test.ts`, and instructs the executor to record the real `cnpj.isValid()` result in the SUMMARY rather than loosen the assertion if the vector is rejected.
 
 2. **Should the availability-check endpoint (`GET /cards/slug-available`) require auth?**
    - What we know: D-02 requires the check to run before the rest of the form is filled, i.e., possibly before the user has an account/session in some flow variants — but per D-01, account creation happens first, then the card form, so the user IS authenticated by the time they reach the slug field.
    - What's unclear: Whether this endpoint should still require `.RequireAuthorization()` (consistent with ACCT-05's "rotas de escrita" being protected) even though it's a read, not a write, and reveals no sensitive data (just true/false).
    - Recommendation: Require auth on it anyway for consistency and to avoid it becoming an unauthenticated slug-enumeration oracle — cheap to add, no UX cost since the user is already logged in at that point per D-01.
+   - **RESOLVED:** Yes, it requires auth — plan `01-03`, Task 1, action step 3 keeps `GET /cards/slug-available` inside the `/cards` group with `.RequireAuthorization()`, closing the unauthenticated slug-enumeration oracle (tracked as threat T-01-19).
 
 3. **`SSL Mode=Require` against local Docker Postgres — does the local container even have SSL enabled?**
    - What we know: Spec 01 says Docker Compose is used purely for local Postgres, no Neon Local proxy.
    - What's unclear: Stock `postgres` Docker images ship with SSL off by default; forcing `SSL Mode=Require` in the connection string locally would break local dev unless the connection string differs per environment.
    - Recommendation: Use an environment-variable-driven connection string where local `.env` omits/sets `SSL Mode=Disable` (or the Docker Postgres image is configured with SSL on) and only the deployed/Neon connection string enforces `SSL Mode=Require;Trust Server Certificate=true`. Document this explicitly in `.env.example` per spec 01's own criterion.
+   - **RESOLVED:** Environment-driven, as recommended — plan `01-01`, Task 2, action step 5 documents in `apps/api/.env.example` that local uses `SSL Mode=Disable` (stock `postgres` image has SSL off) while the Neon/deploy string uses `SSL Mode=Require;Trust Server Certificate=true`. `SSL Mode` is never omitted, so the vetoed `Prefer` default is never in play.
 
 ## Environment Availability
 
