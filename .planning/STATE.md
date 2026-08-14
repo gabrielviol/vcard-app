@@ -4,13 +4,13 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 1 UI-SPEC approved
-last_updated: "2026-08-14T13:17:39.191Z"
-last_activity: 2026-08-14 -- Phase 01 execution started
+last_updated: "2026-08-14T13:40:00.000Z"
+last_activity: 2026-08-14 -- Wave 3 (01-03: card slug + identity) merged, tests green
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 7
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-08-13)
 
 ## Current Position
 
-Phase: 01 (conta-e-cart-o) — EXECUTING
-Plan: 1 of 7
-Status: Executing Phase 01
-Last activity: 2026-08-14 -- Phase 01 execution started
+Phase: 01 (conta-e-cart-o) — EXECUTING, PAUSED before Wave 4
+Plan: 3 of 7 complete (01-01, 01-02*, 01-03)
+Status: Waiting on human verification of Walking Skeleton (01-02 Task 4) before Wave 4 (01-04) starts
+Last activity: 2026-08-14 -- Wave 3 (01-03: card slug + identity) merged to master, post-merge gate green (30/30 backend tests, frontend build+6/6 tests)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [████░░░░░░] 43%
 
 ## Performance Metrics
 
@@ -78,7 +78,7 @@ None yet.
 - Fase 3 (WhatsApp/Pix/.vcf em WebView) exige teste manual real dentro do app do Instagram/WhatsApp — não há documentação oficial da Meta sobre esse comportamento.
 - BRAND-01 depende de ação externa do usuário (registrar domínio) — pode ter lead time fora do controle do dev; iniciar cedo.
 - **Override registrado (Fase 1, planejamento):** o gate mecânico `check.decision-coverage-plan` reportou 11/13 decisões D-NN de `01-CONTEXT.md` como não cobertas, mesmo após citações explícitas `D-NN:` serem adicionadas ao objective de cada plan — o resultado do comando ficou idêntico byte-a-byte antes e depois da edição, e não foi possível localizar a implementação de `decision-coverage-plan` em nenhum arquivo instalado do `gsd-sdk`/`get-shit-done` (indício de bug/cache stale na ferramenta, não de lacuna real). O gate semântico `gsd-plan-checker` (revisão completa dos 7 planos, rodada 2x) confirmou explicitamente as 13 decisões cobertas com plan/task específico. Prosseguido com override (opção 3 do step 13a) dado o modo yolo.
-- **PENDENTE — verificação manual do Walking Skeleton (plano 01-02, Task 4):** ainda não foi executada. Foi marcada como "aprovado" por engano em 2026-08-14 (o dev não tinha rodado o teste de fato) e a marcação foi corrigida em `01-02-SUMMARY.md`. Decisão do dev: deixar o Wave 3 (01-03, em execução) terminar, e então rodar o checklist manual (registro/login/F5/localStorage/logout/erros — ver `01-02-PLAN.md` `<how-to-verify>`) antes de iniciar o Wave 4 (01-04). Requer também: Docker Desktop rodando, `cd apps/web && npm install`, criar `apps/web/.env.local` com `NEXT_PUBLIC_API_URL=http://localhost:5153`. **Não iniciar Wave 4 sem essa confirmação.**
+- **BLOQUEADOR ATIVO — verificação manual do Walking Skeleton (plano 01-02, Task 4):** ainda não foi executada. Foi marcada como "aprovado" por engano em 2026-08-14 (o dev não tinha rodado o teste de fato) e a marcação foi corrigida em `01-02-SUMMARY.md`. Decisão do dev: deixar o Wave 3 (01-03) terminar primeiro — **já terminou e foi mergeado** (30/30 testes backend, build+testes frontend ok) — e rodar o checklist manual agora, antes de iniciar o Wave 4 (01-04). Ver checklist completo em `01-02-PLAN.md` `<how-to-verify>`. Ainda falta: `docker compose up -d db` (ou reaproveitar `agent-a72796e375076714e-db-1`, saudável na porta 5432), criar `apps/web/.env.local` com `NEXT_PUBLIC_API_URL=http://localhost:5153` (`npm install` do apps/web já foi feito na árvore principal). **Não iniciar Wave 4 sem essa confirmação.**
 
 ## Deferred Items
 

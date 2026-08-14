@@ -47,7 +47,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — Slice: criar o cartão com slug único (reservados + unicidade no banco) e identidade
+- [x] 01-03-PLAN.md — Slice: criar o cartão com slug único (reservados + unicidade no banco) e identidade
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conta e Cartão | 2/7 | In Progress|  |
+| 1. Conta e Cartão | 3/7 | In Progress|  |
 | 2. Cartão Público no Ar | 0/TBD | Not started | - |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |
