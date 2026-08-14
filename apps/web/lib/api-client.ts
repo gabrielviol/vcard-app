@@ -55,12 +55,14 @@ export async function apiFetch<T>(path: string, init: ApiFetchInit = {}): Promis
 
   if (!res.ok) {
     let code = "unknown_error";
-    let message = "Não foi possível completar a operação.";
+    // Mantem a mensagem amigavel como default (WR-07) -- body.error e um codigo
+    // snake_case interno (ex: "slug_taken"), nao texto para exibir ao usuario. Callers
+    // usam `.code` para decidir a mensagem certa; `.message` so existe como fallback.
+    const message = "Não foi possível completar a operação.";
     try {
       const body = await res.json();
       if (body?.error) {
         code = body.error;
-        message = body.error;
       }
     } catch {
       // corpo nao-JSON ou vazio -- mantem os defaults
