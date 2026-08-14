@@ -13,7 +13,7 @@ A jornada vai de "ninguém tem conta" até "o cartão está no ar, sendo usado d
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Conta e Cartão** - Dono cria conta e monta seu cartão completo (identidade, contato, Pix, foto, links sociais), tudo validado no momento da criação
+- [x] **Phase 1: Conta e Cartão** - Dono cria conta e monta seu cartão completo (identidade, contato, Pix, foto, links sociais), tudo validado no momento da criação (completed 2026-08-14)
 - [ ] **Phase 2: Cartão Público no Ar** - Cartão público acessível por slug, resiliente a cold start (ISR + pré-aquecimento + keep-alive), com QR pronto para circular, e domínio próprio do produto resolvido
 - [ ] **Phase 3: Contato, Pagamento e Compartilhamento** - Visitante consegue chamar no WhatsApp, copiar o Pix, salvar o contato e acessar os links — inclusive dentro de navegadores embutidos — e o link circula com preview correto
 - [ ] **Phase 4: Aprendizado e Monetização** - Dono vê quantas visitas o cartão recebeu, o cartão grátis exibe a marca do produto, e o clique em "remover marca" registra o sinal de intenção de upgrade
@@ -63,7 +63,7 @@ Plans:
 
 **Wave 7** *(blocked on Wave 6 completion)*
 
-- [ ] 01-07-PLAN.md — Slice: links sociais reordenáveis + passagem manual end-to-end da fase
+- [x] 01-07-PLAN.md — Slice: links sociais reordenáveis + passagem manual end-to-end da fase
 
 **UI hint**: yes
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conta e Cartão | 6/7 | In Progress|  |
+| 1. Conta e Cartão | 7/7 | Complete   | 2026-08-14 |
 | 2. Cartão Público no Ar | 0/TBD | Not started | - |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |
