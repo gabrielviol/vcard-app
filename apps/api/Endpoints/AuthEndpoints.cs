@@ -30,13 +30,18 @@ public static class AuthEndpoints
         if (string.IsNullOrWhiteSpace(request.Password) || request.Password.Length < 8)
             return Results.BadRequest(new { error = "invalid_password" });
 
-        var emailExists = await db.Users.AnyAsync(u => u.Email == request.Email);
+        // Normaliza para minusculas antes de comparar/persistir (CR-01) -- "email unico" so
+        // vale se a comparacao ignorar caixa; sem isso "Joao@x.com" e "joao@x.com" viram
+        // duas contas distintas apesar de serem o mesmo endereco.
+        var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+
+        var emailExists = await db.Users.AnyAsync(u => u.Email == normalizedEmail);
         if (emailExists)
             return Results.Conflict(new { error = "email_taken" });
 
         var user = new User
         {
-            Email = request.Email,
+            Email = normalizedEmail,
             PasswordHash = authService.HashPassword(request.Password),
         };
 
@@ -57,7 +62,10 @@ public static class AuthEndpoints
 
     private static async Task<IResult> LoginHandler(LoginRequest request, AppDbContext db, AuthService authService)
     {
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        // Mesma normalizacao do registro (CR-01) -- login precisa aceitar o email com
+        // qualquer caixa que o usuario digitar, nao so a exata usada no cadastro.
+        var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == normalizedEmail);
 
         if (user is null || !authService.VerifyPassword(request.Password, user.PasswordHash))
             return Results.Json(new { error = "invalid_credentials" }, statusCode: StatusCodes.Status401Unauthorized);
