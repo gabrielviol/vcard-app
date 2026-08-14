@@ -1,10 +1,11 @@
 ---
 phase: 2
 slug: cartao-publico-no-ar
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "new-york / zinc / css-variables"
 created: 2026-08-14
+reviewed_at: 2026-08-14
 ---
 
 # Phase 2 — UI Design Contract
