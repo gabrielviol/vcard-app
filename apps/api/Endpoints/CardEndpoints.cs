@@ -61,6 +61,9 @@ public static class CardEndpoints
         if (pixValidation is not null)
             return pixValidation;
 
+        if (!IsValidPhotoUrl(dto.PhotoUrl))
+            return Results.BadRequest(new { error = "photo_url_invalid" });
+
         var card = new Card
         {
             UserId = userId.Value,
@@ -145,6 +148,9 @@ public static class CardEndpoints
         if (pixValidation is not null)
             return pixValidation;
 
+        if (!IsValidPhotoUrl(dto.PhotoUrl))
+            return Results.BadRequest(new { error = "photo_url_invalid" });
+
         card.Slug = slug;
         card.FullName = dto.FullName;
         card.Role = dto.Role;
@@ -193,6 +199,24 @@ public static class CardEndpoints
         }
 
         return null;
+    }
+
+    // photo_url so pode apontar para o blob store do proprio produto (CARD-09/T-01-34).
+    // Vazio/nulo e sempre valido (D-04/D-12); quando preenchido, precisa ser https e o
+    // host precisa terminar em ".public.blob.vercel-storage.com" -- impede que a pagina
+    // publica da Fase 2 renderize <img src> apontando para host/tracker de terceiro.
+    private static bool IsValidPhotoUrl(string? photoUrl)
+    {
+        if (string.IsNullOrWhiteSpace(photoUrl))
+            return true;
+
+        if (!Uri.TryCreate(photoUrl, UriKind.Absolute, out var uri))
+            return false;
+
+        if (uri.Scheme != Uri.UriSchemeHttps)
+            return false;
+
+        return uri.Host.EndsWith(".public.blob.vercel-storage.com", StringComparison.OrdinalIgnoreCase);
     }
 
     private static Guid? GetUserId(ClaimsPrincipal principal)
