@@ -51,6 +51,12 @@ public static class CardEndpoints
         if (SlugService.IsReserved(slug))
             return Results.Conflict(new { error = "slug_reserved" });
 
+        // Nunca confiar no valor ja "normalizado" que o cliente enviou (T-01-22) -- o
+        // servidor e a autoridade para o valor persistido em whatsapp_number.
+        if (!string.IsNullOrWhiteSpace(dto.WhatsappNumber) && !WhatsappNormalizer.IsValid(dto.WhatsappNumber))
+            return Results.BadRequest(new { error = "whatsapp_invalid" });
+        var normalizedWhatsapp = WhatsappNormalizer.Normalize(dto.WhatsappNumber);
+
         var card = new Card
         {
             UserId = userId.Value,
@@ -61,7 +67,7 @@ public static class CardEndpoints
             PhotoUrl = dto.PhotoUrl,
             Phone = dto.Phone,
             Email = dto.Email,
-            WhatsappNumber = dto.WhatsappNumber,
+            WhatsappNumber = string.IsNullOrEmpty(normalizedWhatsapp) ? null : normalizedWhatsapp,
             PixKey = dto.PixKey,
             PixKeyType = dto.PixKeyType,
             PixConsentConfirmed = false,
@@ -123,6 +129,12 @@ public static class CardEndpoints
         if (SlugService.IsReserved(slug))
             return Results.Conflict(new { error = "slug_reserved" });
 
+        // Nunca confiar no valor ja "normalizado" que o cliente enviou (T-01-22) -- o
+        // servidor e a autoridade para o valor persistido em whatsapp_number.
+        if (!string.IsNullOrWhiteSpace(dto.WhatsappNumber) && !WhatsappNormalizer.IsValid(dto.WhatsappNumber))
+            return Results.BadRequest(new { error = "whatsapp_invalid" });
+        var normalizedWhatsapp = WhatsappNormalizer.Normalize(dto.WhatsappNumber);
+
         card.Slug = slug;
         card.FullName = dto.FullName;
         card.Role = dto.Role;
@@ -130,7 +142,7 @@ public static class CardEndpoints
         card.PhotoUrl = dto.PhotoUrl;
         card.Phone = dto.Phone;
         card.Email = dto.Email;
-        card.WhatsappNumber = dto.WhatsappNumber;
+        card.WhatsappNumber = string.IsNullOrEmpty(normalizedWhatsapp) ? null : normalizedWhatsapp;
         card.PixKey = dto.PixKey;
         card.PixKeyType = dto.PixKeyType;
         card.UpdatedAt = DateTime.UtcNow;
