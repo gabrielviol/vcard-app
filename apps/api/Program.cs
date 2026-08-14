@@ -74,6 +74,7 @@ app.MapAuthEndpoints();
 
 var cards = app.MapGroup("/cards").RequireAuthorization();
 cards.MapCardEndpoints();
+cards.MapSocialLinkEndpoints();
 
 app.Run();
 
