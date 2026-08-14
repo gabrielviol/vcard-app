@@ -183,3 +183,7 @@ None - no external service configuration required. Local Postgres runs via `dock
 ---
 *Phase: 01-conta-e-cart-o*
 *Completed: 2026-08-14*
+
+## Self-Check: PASSED
+
+All 20 created files verified present on disk. All 4 commit hashes (`dce3811`, `18751ae`, `8fe0636`, `9a5eb1f`) verified present in `git log --oneline --all`.
