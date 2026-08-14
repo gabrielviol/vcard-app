@@ -20,20 +20,20 @@ Nome e domínio saíram de "pendência" para caminho crítico quando marca + int
 - [x] **ACCT-02**: Usuário faz login com e-mail e senha e recebe um access token JWT
 - [x] **ACCT-03**: Usuário permanece autenticado ao navegar e ao recarregar o dashboard
 - [x] **ACCT-04**: Usuário é redirecionado para `/login` quando o token está ausente ou expirado
-- [ ] **ACCT-05**: Rotas de escrita de Card, SocialLink e views retornam 401 sem token válido
+- [x] **ACCT-05**: Rotas de escrita de Card, SocialLink e views retornam 401 sem token válido
 
 ### Cartão (CARD)
 
-- [ ] **CARD-01**: Usuário cria seu cartão escolhendo um slug único para a URL pública
-- [ ] **CARD-02**: Sistema rejeita slugs reservados (`login`, `dashboard`, `api`, `_next`, `admin`, etc.) e slugs já em uso
-- [ ] **CARD-03**: Usuário edita identidade do cartão: nome completo, cargo e empresa
-- [ ] **CARD-04**: Usuário edita canais de contato: telefone, e-mail e número de WhatsApp
-- [ ] **CARD-05**: Usuário cadastra chave Pix escolhendo o tipo (CPF, CNPJ, e-mail, telefone, aleatória)
-- [ ] **CARD-06**: Sistema valida o formato da chave Pix conforme o tipo escolhido antes de salvar (dígito verificador em CPF/CNPJ, UUID v4 em chave aleatória) e exibe prévia formatada
-- [ ] **CARD-07**: Usuário é avisado, antes de salvar, que a chave Pix ficará visível publicamente — com aviso reforçado quando o tipo for CPF
-- [ ] **CARD-08**: Sistema normaliza o número de WhatsApp para dígitos puros com DDI 55 no momento de salvar, independente da máscara digitada
-- [ ] **CARD-09**: Usuário faz upload da foto do cartão direto do browser, e a foto aparece no cartão público
-- [ ] **CARD-10**: Usuário adiciona, remove e reordena links sociais (Instagram, LinkedIn, Twitter, TikTok, YouTube, site)
+- [x] **CARD-01**: Usuário cria seu cartão escolhendo um slug único para a URL pública
+- [x] **CARD-02**: Sistema rejeita slugs reservados (`login`, `dashboard`, `api`, `_next`, `admin`, etc.) e slugs já em uso
+- [x] **CARD-03**: Usuário edita identidade do cartão: nome completo, cargo e empresa
+- [x] **CARD-04**: Usuário edita canais de contato: telefone, e-mail e número de WhatsApp
+- [x] **CARD-05**: Usuário cadastra chave Pix escolhendo o tipo (CPF, CNPJ, e-mail, telefone, aleatória)
+- [x] **CARD-06**: Sistema valida o formato da chave Pix conforme o tipo escolhido antes de salvar (dígito verificador em CPF/CNPJ, UUID v4 em chave aleatória) e exibe prévia formatada
+- [x] **CARD-07**: Usuário é avisado, antes de salvar, que a chave Pix ficará visível publicamente — com aviso reforçado quando o tipo for CPF
+- [x] **CARD-08**: Sistema normaliza o número de WhatsApp para dígitos puros com DDI 55 no momento de salvar, independente da máscara digitada
+- [x] **CARD-09**: Usuário faz upload da foto do cartão direto do browser, e a foto aparece no cartão público
+- [x] **CARD-10**: Usuário adiciona, remove e reordena links sociais (Instagram, LinkedIn, Twitter, TikTok, YouTube, site)
 
 ### Cartão Público (PUB)
 
@@ -133,17 +133,17 @@ Preenchido durante a criação do roadmap.
 | ACCT-02 | Phase 1 | Complete |
 | ACCT-03 | Phase 1 | Complete |
 | ACCT-04 | Phase 1 | Complete |
-| ACCT-05 | Phase 1 | Pending |
-| CARD-01 | Phase 1 | Pending |
-| CARD-02 | Phase 1 | Pending |
-| CARD-03 | Phase 1 | Pending |
-| CARD-04 | Phase 1 | Pending |
-| CARD-05 | Phase 1 | Pending |
-| CARD-06 | Phase 1 | Pending |
-| CARD-07 | Phase 1 | Pending |
-| CARD-08 | Phase 1 | Pending |
-| CARD-09 | Phase 1 | Pending |
-| CARD-10 | Phase 1 | Pending |
+| ACCT-05 | Phase 1 | Complete |
+| CARD-01 | Phase 1 | Complete |
+| CARD-02 | Phase 1 | Complete |
+| CARD-03 | Phase 1 | Complete |
+| CARD-04 | Phase 1 | Complete |
+| CARD-05 | Phase 1 | Complete |
+| CARD-06 | Phase 1 | Complete |
+| CARD-07 | Phase 1 | Complete |
+| CARD-08 | Phase 1 | Complete |
+| CARD-09 | Phase 1 | Complete |
+| CARD-10 | Phase 1 | Complete |
 | PUB-01 | Phase 2 | Pending |
 | PUB-02 | Phase 2 | Pending |
 | PUB-03 | Phase 2 | Pending |
