@@ -59,7 +59,7 @@ Plans:
 
 **Wave 6** *(blocked on Wave 5 completion)*
 
-- [ ] 01-06-PLAN.md — Slice: foto do cartão via Vercel Blob e placeholder de iniciais
+- [x] 01-06-PLAN.md — Slice: foto do cartão via Vercel Blob e placeholder de iniciais
 
 **Wave 7** *(blocked on Wave 6 completion)*
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conta e Cartão | 5/7 | In Progress|  |
+| 1. Conta e Cartão | 6/7 | In Progress|  |
 | 2. Cartão Público no Ar | 0/TBD | Not started | - |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |
