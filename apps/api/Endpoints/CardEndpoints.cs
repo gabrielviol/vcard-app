@@ -193,6 +193,12 @@ public static class CardEndpoints
         if (!string.IsNullOrWhiteSpace(dto.PixKeyType) && !PixValidationService.IsKnownType(dto.PixKeyType))
             return Results.BadRequest(new { error = "pix_type_invalid" });
 
+        // pixKeyType e pixKey precisam andar juntos (WR-06) -- um tipo setado sem chave
+        // preenchida deixava a validacao inteira ser pulada, permitindo persistir
+        // pixKeyType="cpf"/pixConsentConfirmed=true sem nenhuma chave de fato salva.
+        if (!string.IsNullOrWhiteSpace(dto.PixKeyType) && string.IsNullOrWhiteSpace(dto.PixKey))
+            return Results.BadRequest(new { error = "pix_key_required" });
+
         if (!string.IsNullOrWhiteSpace(dto.PixKey))
         {
             if (!PixValidationService.IsValid(dto.PixKeyType, dto.PixKey))
