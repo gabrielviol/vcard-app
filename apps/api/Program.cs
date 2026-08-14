@@ -1,5 +1,7 @@
 using System.Text;
 using Api.Data;
+using Api.Endpoints;
+using Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +21,10 @@ var jwtKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        // Keep JWT claim types as issued ("sub", "email") instead of ASP.NET Core's default
+        // remapping to long ClaimTypes.* URIs (e.g. "sub" -> NameIdentifier) — AuthService issues
+        // JwtRegisteredClaimNames.Sub/Email and endpoint handlers read those exact claim types.
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -34,6 +40,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorizationBuilder();
+
+builder.Services.AddScoped<AuthService>();
 
 var webOrigin = builder.Configuration["Cors:WebOrigin"]
     ?? throw new InvalidOperationException("Cors__WebOrigin not set");
@@ -62,7 +70,14 @@ app.MapGet("/health", async (AppDbContext db) =>
         : Results.Json(new { status = "error", database = "down" }, statusCode: 503);
 });
 
+app.MapAuthEndpoints();
+
 var cards = app.MapGroup("/cards").RequireAuthorization();
+
+// Placeholder so the group has a routable endpoint for RequireAuthorization to guard against
+// (an empty group has no matched route, so unauthenticated requests would 404 before auth even
+// runs) — anchors ACCT-05 now; the real handler lands in plan 01-03.
+cards.MapPost("/", () => Results.StatusCode(StatusCodes.Status501NotImplemented));
 
 app.Run();
 
