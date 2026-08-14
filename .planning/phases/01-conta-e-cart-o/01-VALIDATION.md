@@ -2,9 +2,9 @@
 phase: 1
 slug: conta-e-cartao
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_infra_complete: true
-wave_0_complete: false
+wave_0_complete: true
 created: 2026-08-13
 ---
 
@@ -53,12 +53,12 @@ Two distinct flags, because the test *infrastructure* lands several plans before
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 01-01-04 | 01-01 | 1 | ACCT-01 | T-01-03 | Register hashes password with BCrypt, never stores plaintext | integration | `dotnet test --filter FullyQualifiedName~RegisterTests` | ❌ W0 | ⬜ pending |
-| 01-01-04 | 01-01 | 1 | ACCT-02 | T-01-01 | Login returns valid JWT for correct credentials | integration | `dotnet test --filter FullyQualifiedName~LoginTests` | ❌ W0 | ⬜ pending |
-| 01-01-04 | 01-01 | 1 | ACCT-04/05 | T-01-02, T-01-07 | Protected endpoints return 401 without/with-expired token | integration | `dotnet test --filter FullyQualifiedName~AuthGuardTests` | ❌ W0 | ⬜ pending |
-| 01-03-01 | 01-03 | 3 | CARD-01/02 | T-01-19 | Slug uniqueness + reserved-word rejection | integration | `dotnet test --filter FullyQualifiedName~SlugTests` | ❌ W0 | ⬜ pending |
-| 01-05-01 | 01-05 | 5 | CARD-06 | T-01-27 | Pix validation per type (CPF check digit, CNPJ alphanumeric, UUID v4) | unit | `npx vitest run pix-validation` | ❌ W0 | ⬜ pending |
-| 01-04-01 | 01-04 | 4 | CARD-08 | — | WhatsApp normalization (9th-digit DDD rule, +55 stripping) | unit | `npx vitest run whatsapp-normalize` | ❌ W0 | ⬜ pending |
+| 01-01-04 | 01-01 | 1 | ACCT-01 | T-01-03 | Register hashes password with BCrypt, never stores plaintext | integration | `dotnet test --filter FullyQualifiedName~RegisterTests` | ✅ | ⬜ pending |
+| 01-01-04 | 01-01 | 1 | ACCT-02 | T-01-01 | Login returns valid JWT for correct credentials | integration | `dotnet test --filter FullyQualifiedName~LoginTests` | ✅ | ⬜ pending |
+| 01-01-04 | 01-01 | 1 | ACCT-04/05 | T-01-02, T-01-07 | Protected endpoints return 401 without/with-expired token | integration | `dotnet test --filter FullyQualifiedName~AuthGuardTests` | ✅ | ⬜ pending |
+| 01-03-01 | 01-03 | 3 | CARD-01/02 | T-01-19 | Slug uniqueness + reserved-word rejection | integration | `dotnet test --filter FullyQualifiedName~SlugTests` | ✅ | ⬜ pending |
+| 01-05-01 | 01-05 | 5 | CARD-06 | T-01-27 | Pix validation per type (CPF check digit, CNPJ alphanumeric, UUID v4) | unit | `npx vitest run pix-validation` | ✅ | ⬜ pending |
+| 01-04-01 | 01-04 | 4 | CARD-08 | — | WhatsApp normalization (9th-digit DDD rule, +55 stripping) | unit | `npx vitest run whatsapp-normalize` | ✅ | ⬜ pending |
 | 01-06-02 | 01-06 | 6 | CARD-09 | — | Photo upload flow | manual | — (smoke test via dashboard UI) | N/A | ⬜ pending |
 | 01-07-01 | 01-07 | 7 | CARD-10 | — | Social link reorder persists `display_order` | integration | `dotnet test --filter FullyQualifiedName~SocialLinkReorderTests` | ❌ W0 | ⬜ pending |
 
@@ -68,11 +68,11 @@ Two distinct flags, because the test *infrastructure* lands several plans before
 
 ## Wave 0 Requirements
 
-- [ ] `apps/api/Api.Tests/Api.Tests.csproj` — xUnit + `Microsoft.AspNetCore.Mvc.Testing` project, none exists yet *(delivered by plan `01-01`, Task 4)*
-- [ ] `apps/web/vitest.config.ts` — Vitest config, none exists yet *(delivered by plan `01-02`, Task 1)*
-- [ ] `apps/web/lib/whatsapp-normalize.test.ts`, `apps/web/lib/pix-validation.test.ts` — cover CARD-06/CARD-08 *(delivered by plans `01-04` Task 1 and `01-05` Task 1)*
-- [ ] `apps/api/Api.Tests/AuthTests.cs`, `SlugTests.cs` — cover ACCT-01/02/04/05, CARD-01/02 *(delivered by plans `01-01` Task 4 and `01-03` Task 1)*
-- [ ] Framework install: `dotnet add apps/api/Api.Tests package Microsoft.AspNetCore.Mvc.Testing`, `npm install -D vitest` in `apps/web` *(delivered by plans `01-01` Task 4 and `01-02` Task 1)*
+- [x] `apps/api/Api.Tests/Api.Tests.csproj` — xUnit + `Microsoft.AspNetCore.Mvc.Testing` project, none exists yet *(delivered by plan `01-01`, Task 4)*
+- [x] `apps/web/vitest.config.ts` — Vitest config, none exists yet *(delivered by plan `01-02`, Task 1)*
+- [x] `apps/web/lib/whatsapp-normalize.test.ts`, `apps/web/lib/pix-validation.test.ts` — cover CARD-06/CARD-08 *(delivered by plans `01-04` Task 1 and `01-05` Task 1)*
+- [x] `apps/api/Api.Tests/AuthTests.cs`, `SlugTests.cs` — cover ACCT-01/02/04/05, CARD-01/02 *(delivered by plans `01-01` Task 4 and `01-03` Task 1)*
+- [x] Framework install: `dotnet add apps/api/Api.Tests package Microsoft.AspNetCore.Mvc.Testing`, `npm install -D vitest` in `apps/web` *(delivered by plans `01-01` Task 4 and `01-02` Task 1)*
 
 > Checklist closes in plan `01-05`, Task 1 — the plan that creates the last file above. Only then may the `wave_0_complete` and `nyquist_compliant` frontmatter flags be flipped to true.
 
@@ -94,8 +94,8 @@ Two distinct flags, because the test *infrastructure* lands several plans before
 - [ ] Wave 0 covers all MISSING references
 - [ ] No watch-mode flags
 - [ ] Feedback latency < 60s
-- [ ] Frontmatter flag `wave_0_infra_complete` flipped to true (plan `01-02`)
-- [ ] Frontmatter flag `wave_0_complete` flipped to true (plan `01-05`, only after all 5 checklist files exist)
-- [ ] Frontmatter flag `nyquist_compliant` flipped to true (plan `01-05`)
+- [x] Frontmatter flag `wave_0_infra_complete` flipped to true (plan `01-02`)
+- [x] Frontmatter flag `wave_0_complete` flipped to true (plan `01-05`, only after all 5 checklist files exist)
+- [x] Frontmatter flag `nyquist_compliant` flipped to true (plan `01-05`)
 
 **Approval:** pending

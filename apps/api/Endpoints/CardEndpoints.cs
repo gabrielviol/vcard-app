@@ -57,6 +57,10 @@ public static class CardEndpoints
             return Results.BadRequest(new { error = "whatsapp_invalid" });
         var normalizedWhatsapp = WhatsappNormalizer.Normalize(dto.WhatsappNumber);
 
+        var pixValidation = ValidatePix(dto);
+        if (pixValidation is not null)
+            return pixValidation;
+
         var card = new Card
         {
             UserId = userId.Value,
@@ -70,7 +74,9 @@ public static class CardEndpoints
             WhatsappNumber = string.IsNullOrEmpty(normalizedWhatsapp) ? null : normalizedWhatsapp,
             PixKey = dto.PixKey,
             PixKeyType = dto.PixKeyType,
-            PixConsentConfirmed = false,
+            // So persiste true quando o tipo e "cpf" -- trocar/enviar qualquer outro tipo
+            // sempre zera o consentimento (T-01-31), mesmo que o cliente mande true por engano.
+            PixConsentConfirmed = dto.PixKeyType == "cpf" && dto.PixConsentConfirmed,
             IsBranded = true,
         };
 
@@ -135,6 +141,10 @@ public static class CardEndpoints
             return Results.BadRequest(new { error = "whatsapp_invalid" });
         var normalizedWhatsapp = WhatsappNormalizer.Normalize(dto.WhatsappNumber);
 
+        var pixValidation = ValidatePix(dto);
+        if (pixValidation is not null)
+            return pixValidation;
+
         card.Slug = slug;
         card.FullName = dto.FullName;
         card.Role = dto.Role;
@@ -145,6 +155,9 @@ public static class CardEndpoints
         card.WhatsappNumber = string.IsNullOrEmpty(normalizedWhatsapp) ? null : normalizedWhatsapp;
         card.PixKey = dto.PixKey;
         card.PixKeyType = dto.PixKeyType;
+        // So persiste true quando o tipo e "cpf" -- trocar para qualquer outro tipo sempre
+        // zera o consentimento (T-01-31), mesmo que o cliente mande true por engano.
+        card.PixConsentConfirmed = dto.PixKeyType == "cpf" && dto.PixConsentConfirmed;
         card.UpdatedAt = DateTime.UtcNow;
 
         try
@@ -157,6 +170,29 @@ public static class CardEndpoints
         }
 
         return Results.Ok(ToResponseDto(card));
+    }
+
+    // Validacao Pix (CARD-06/CARD-07) compartilhada entre POST e PUT -- nunca confiar no
+    // formato/consentimento reportado pelo cliente (T-01-27/T-01-28). Devolve null quando
+    // o payload esta ok para persistir; devolve o IResult de erro caso contrario.
+    private static IResult? ValidatePix(CardWriteDto dto)
+    {
+        if (!string.IsNullOrWhiteSpace(dto.PixKeyType) && !PixValidationService.IsKnownType(dto.PixKeyType))
+            return Results.BadRequest(new { error = "pix_type_invalid" });
+
+        if (!string.IsNullOrWhiteSpace(dto.PixKey))
+        {
+            if (!PixValidationService.IsValid(dto.PixKeyType, dto.PixKey))
+                return Results.BadRequest(new { error = "pix_key_invalid" });
+
+            // CARD-07 (D-09): CPF exposto publicamente exige consentimento explicito,
+            // verificado aqui a partir do valor persistido -- nao do estado efemero do
+            // formulario (T-01-28).
+            if (dto.PixKeyType == "cpf" && !dto.PixConsentConfirmed)
+                return Results.BadRequest(new { error = "pix_consent_required" });
+        }
+
+        return null;
     }
 
     private static Guid? GetUserId(ClaimsPrincipal principal)
