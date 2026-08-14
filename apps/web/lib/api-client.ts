@@ -50,12 +50,12 @@ export async function apiFetch<T>(path: string, init: ApiFetchInit = {}): Promis
     if (typeof window !== "undefined") {
       window.location.replace("/login?expired=1");
     }
-    throw new ApiError(401, "unauthorized", "Sessao expirada.");
+    throw new ApiError(401, "unauthorized", "Sessão expirada.");
   }
 
   if (!res.ok) {
     let code = "unknown_error";
-    let message = "Nao foi possivel completar a operacao.";
+    let message = "Não foi possível completar a operação.";
     try {
       const body = await res.json();
       if (body?.error) {
