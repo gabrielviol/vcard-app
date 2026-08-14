@@ -1,44 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { apiFetch } from "@/lib/api-client";
-import { clearToken } from "@/lib/auth-storage";
-import { Button } from "@/components/ui/button";
+import { ApiError, apiFetch } from "@/lib/api-client";
+import type { CardResponseDto } from "@/components/card-form/card-form";
 
-type Me = { id: string; email: string };
-
-// Esta chamada a GET /auth/me e a prova fim a fim do walking skeleton (D-06/D-07):
-// dispara o redirect reativo de 401 quando o token expira/e invalido, e e a unica
-// fonte de verdade para o e-mail exibido -- o layout do grupo (dashboard) so checa a
-// PRESENCA do token, nunca a validade dele.
+// Sem dashboard vazio intermediario (D-01): so redireciona para o formulario de
+// criacao (sem cartao) ou de edicao (com cartao). Nenhuma UI propria renderizada
+// aqui -- este componente e so a logica de roteamento pos-login.
 export default function DashboardPage() {
   const router = useRouter();
-  const [me, setMe] = useState<Me | null>(null);
 
   useEffect(() => {
-    apiFetch<Me>("/auth/me")
-      .then(setMe)
-      .catch(() => {
-        // Erros ja tratados pelo interceptor de api-client.ts (401 limpa o token e
-        // redireciona); outros erros de rede simplesmente deixam a tela sem dado.
-      });
-  }, []);
+    let cancelled = false;
 
-  function handleLogout() {
-    clearToken();
-    router.push("/login");
-  }
+    apiFetch<CardResponseDto>("/cards/me")
+      .then((card) => {
+        if (cancelled) return;
+        router.replace(`/dashboard/cards/${card.id}/edit`);
+      })
+      .catch((error) => {
+        if (cancelled) return;
+        if (error instanceof ApiError && error.status === 404) {
+          router.replace("/dashboard/cards/new");
+          return;
+        }
+        // Outros erros ja tratados pelo interceptor de api-client.ts (401 limpa o
+        // token e redireciona).
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-zinc-50 px-4">
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-[20px] font-semibold leading-[1.2]">Dashboard</h1>
-        <p className="text-base text-zinc-600">{me ? me.email : "Carregando..."}</p>
-      </div>
-      <Button variant="outline" onClick={handleLogout}>
-        Sair
-      </Button>
+    <div className="flex min-h-screen items-center justify-center bg-zinc-50">
+      <p className="text-base text-zinc-500">Carregando…</p>
     </div>
   );
 }

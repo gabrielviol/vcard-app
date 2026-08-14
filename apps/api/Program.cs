@@ -73,11 +73,7 @@ app.MapGet("/health", async (AppDbContext db) =>
 app.MapAuthEndpoints();
 
 var cards = app.MapGroup("/cards").RequireAuthorization();
-
-// Placeholder so the group has a routable endpoint for RequireAuthorization to guard against
-// (an empty group has no matched route, so unauthenticated requests would 404 before auth even
-// runs) — anchors ACCT-05 now; the real handler lands in plan 01-03.
-cards.MapPost("/", () => Results.StatusCode(StatusCodes.Status501NotImplemented));
+cards.MapCardEndpoints();
 
 app.Run();
 
