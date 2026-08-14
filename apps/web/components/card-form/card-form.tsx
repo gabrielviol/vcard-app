@@ -160,6 +160,13 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
         });
         return;
       }
+      if (error instanceof ApiError && error.code === "photo_url_invalid") {
+        form.setError("photoUrl", {
+          type: "server",
+          message: "URL da foto inválida.",
+        });
+        return;
+      }
       if (error instanceof ApiError && error.code === "pix_consent_required") {
         // Reabre o modal bloqueante de CPF (D-09) -- caminho defensivo, o cliente ja
         // barra este estado antes do submit via superRefine em card-schema.ts.

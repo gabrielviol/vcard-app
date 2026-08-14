@@ -14,7 +14,14 @@ export const cardSchema = z.object({
   fullName: z.string().min(2, "Informe o nome completo."),
   role: z.string().optional(),
   company: z.string().optional(),
-  photoUrl: z.string().optional(),
+  // Opcional (D-04/D-12); quando preenchida, precisa ser uma URL https -- espelha a
+  // validacao de host permitido que o servidor aplica (CardEndpoints.ValidatePhotoUrl).
+  photoUrl: z
+    .string()
+    .optional()
+    .refine((value) => !value || (z.url().safeParse(value).success && value.startsWith("https://")), {
+      message: "URL da foto inválida.",
+    }),
   phone: z.string().optional(),
   // Opcional (D-04), mas quando preenchido precisa ser um e-mail valido.
   email: z

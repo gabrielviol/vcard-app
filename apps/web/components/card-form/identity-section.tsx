@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PhotoSection } from "@/components/card-form/photo-section";
 
 export function IdentitySection() {
   const form = useFormContext<CardFormValues>();
@@ -17,6 +18,7 @@ export function IdentitySection() {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-[20px] font-semibold leading-[1.2]">Identidade</h2>
+      <PhotoSection />
       <FormField
         control={form.control}
         name="fullName"
