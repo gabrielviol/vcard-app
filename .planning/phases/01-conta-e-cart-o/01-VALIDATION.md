@@ -1,7 +1,7 @@
 ---
 phase: 1
 slug: conta-e-cartao
-status: draft
+status: approved
 nyquist_compliant: true
 wave_0_infra_complete: true
 wave_0_complete: true
@@ -53,14 +53,14 @@ Two distinct flags, because the test *infrastructure* lands several plans before
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 01-01-04 | 01-01 | 1 | ACCT-01 | T-01-03 | Register hashes password with BCrypt, never stores plaintext | integration | `dotnet test --filter FullyQualifiedName~RegisterTests` | ✅ | ⬜ pending |
-| 01-01-04 | 01-01 | 1 | ACCT-02 | T-01-01 | Login returns valid JWT for correct credentials | integration | `dotnet test --filter FullyQualifiedName~LoginTests` | ✅ | ⬜ pending |
-| 01-01-04 | 01-01 | 1 | ACCT-04/05 | T-01-02, T-01-07 | Protected endpoints return 401 without/with-expired token | integration | `dotnet test --filter FullyQualifiedName~AuthGuardTests` | ✅ | ⬜ pending |
-| 01-03-01 | 01-03 | 3 | CARD-01/02 | T-01-19 | Slug uniqueness + reserved-word rejection | integration | `dotnet test --filter FullyQualifiedName~SlugTests` | ✅ | ⬜ pending |
-| 01-05-01 | 01-05 | 5 | CARD-06 | T-01-27 | Pix validation per type (CPF check digit, CNPJ alphanumeric, UUID v4) | unit | `npx vitest run pix-validation` | ✅ | ⬜ pending |
-| 01-04-01 | 01-04 | 4 | CARD-08 | — | WhatsApp normalization (9th-digit DDD rule, +55 stripping) | unit | `npx vitest run whatsapp-normalize` | ✅ | ⬜ pending |
-| 01-06-02 | 01-06 | 6 | CARD-09 | — | Photo upload flow | manual | — (smoke test via dashboard UI) | N/A | ⬜ pending |
-| 01-07-01 | 01-07 | 7 | CARD-10 | — | Social link reorder persists `display_order` | integration | `dotnet test --filter FullyQualifiedName~SocialLinkReorderTests` | ❌ W0 | ⬜ pending |
+| 01-01-04 | 01-01 | 1 | ACCT-01 | T-01-03 | Register hashes password with BCrypt, never stores plaintext | integration | `dotnet test --filter FullyQualifiedName~RegisterTests` | ✅ | ✅ green |
+| 01-01-04 | 01-01 | 1 | ACCT-02 | T-01-01 | Login returns valid JWT for correct credentials | integration | `dotnet test --filter FullyQualifiedName~LoginTests` | ✅ | ✅ green |
+| 01-01-04 | 01-01 | 1 | ACCT-04/05 | T-01-02, T-01-07 | Protected endpoints return 401 without/with-expired token | integration | `dotnet test --filter FullyQualifiedName~AuthGuardTests` | ✅ | ✅ green |
+| 01-03-01 | 01-03 | 3 | CARD-01/02 | T-01-19 | Slug uniqueness + reserved-word rejection | integration | `dotnet test --filter FullyQualifiedName~SlugTests` | ✅ | ✅ green |
+| 01-05-01 | 01-05 | 5 | CARD-06 | T-01-27 | Pix validation per type (CPF check digit, CNPJ alphanumeric, UUID v4) | unit | `npx vitest run pix-validation` | ✅ | ✅ green |
+| 01-04-01 | 01-04 | 4 | CARD-08 | — | WhatsApp normalization (9th-digit DDD rule, +55 stripping) | unit | `npx vitest run whatsapp-normalize` | ✅ | ✅ green |
+| 01-06-02 | 01-06 | 6 | CARD-09 | — | Photo upload flow | manual | — (smoke test via dashboard UI) | N/A | ✅ green (manual, approved plan 01-06 Task 2 + re-confirmed 01-07 Task 3 step 10) |
+| 01-07-01 | 01-07 | 7 | CARD-10 | — | Social link reorder persists `display_order` | integration | `dotnet test --filter FullyQualifiedName~SocialLinkReorderTests` | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -89,13 +89,13 @@ Two distinct flags, because the test *infrastructure* lands several plans before
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 60s
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 60s
 - [x] Frontmatter flag `wave_0_infra_complete` flipped to true (plan `01-02`)
 - [x] Frontmatter flag `wave_0_complete` flipped to true (plan `01-05`, only after all 5 checklist files exist)
 - [x] Frontmatter flag `nyquist_compliant` flipped to true (plan `01-05`)
 
-**Approval:** pending
+**Approval:** Approved — 2026-08-14, developer ran the full `dotnet test` (90/90) + `npx vitest run` (54/54) suites plus the 13-step manual end-to-end walkthrough (plan `01-07` Task 3) and responded "aprovado". No app-level bugs found; two local dev-environment hiccups during the session (stale `.next` build cache, `apps/api` process needing a restart) were unrelated to code and resolved by restarting the affected process — see `01-07-SUMMARY.md` for details.

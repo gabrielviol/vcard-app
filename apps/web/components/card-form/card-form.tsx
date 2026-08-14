@@ -24,6 +24,7 @@ import { SlugField } from "@/components/card-form/slug-field";
 import { IdentitySection } from "@/components/card-form/identity-section";
 import { ContactSection } from "@/components/card-form/contact-section";
 import { PixSection } from "@/components/card-form/pix-section";
+import { SocialLinksSection } from "@/components/card-form/social-links-section";
 
 export type SocialLink = {
   id: string;
@@ -72,18 +73,6 @@ function toDefaultValues(initialCard?: CardResponseDto): CardFormValues {
     pixKeyType: toPixKeyType(initialCard?.pixKeyType),
     pixConsentConfirmed: initialCard?.pixConsentConfirmed ?? false,
   };
-}
-
-// Blocos de secao reservados para os planos 04 (Contato), 05 (Pix) e 07 (Links
-// sociais) -- mantem a ordem estavel definida na UI-SPEC; ate la, so o titulo da
-// secao existe, sem nenhum componente/campo importado (nao ha nada a preencher
-// ainda, nao e um stub de dado -- e um espaco reservado de layout).
-function ReservedSection({ title }: { title: string }) {
-  return (
-    <section className="flex flex-col gap-4">
-      <h2 className="text-[20px] font-semibold leading-[1.2]">{title}</h2>
-    </section>
-  );
 }
 
 export function CardForm({ mode, initialCard }: CardFormProps) {
@@ -198,7 +187,7 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
             <IdentitySection />
             <ContactSection />
             <PixSection reopenConfirmSignal={pixReopenSignal} />
-            <ReservedSection title="Links sociais" />
+            <SocialLinksSection cardId={initialCard?.id} initialLinks={initialCard?.socialLinks ?? []} />
 
             <Button
               type="submit"
