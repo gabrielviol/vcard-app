@@ -55,7 +55,7 @@ Plans:
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
-- [ ] 01-05-PLAN.md — Slice: chave Pix validada por tipo com consentimento de CPF verificado no servidor
+- [x] 01-05-PLAN.md — Slice: chave Pix validada por tipo com consentimento de CPF verificado no servidor
 
 **Wave 6** *(blocked on Wave 5 completion)*
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conta e Cartão | 4/7 | In Progress|  |
+| 1. Conta e Cartão | 5/7 | In Progress|  |
 | 2. Cartão Público no Ar | 0/TBD | Not started | - |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |
