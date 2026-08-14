@@ -10,6 +10,7 @@ import { clearToken } from "@/lib/auth-storage";
 import { Button } from "@/components/ui/button";
 import { SlugField } from "@/components/card-form/slug-field";
 import { IdentitySection } from "@/components/card-form/identity-section";
+import { ContactSection } from "@/components/card-form/contact-section";
 
 export type SocialLink = {
   id: string;
@@ -153,7 +154,7 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
           >
             <SlugField currentSlug={initialCard?.slug} />
             <IdentitySection />
-            <ReservedSection title="Contato" />
+            <ContactSection />
             <ReservedSection title="Pix" />
             <ReservedSection title="Links sociais" />
 
