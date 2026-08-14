@@ -30,7 +30,17 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Usuário cria seu cartão escolhendo um slug único (sistema rejeita slugs reservados e já em uso) e edita nome, cargo, empresa e foto
   4. Usuário cadastra telefone, e-mail e WhatsApp (normalizado para DDI 55 no momento de salvar) e chave Pix com validação de formato por tipo, prévia formatada e aviso reforçado de exposição pública quando o tipo é CPF
   5. Usuário adiciona, remove e reordena seus links sociais (Instagram, LinkedIn, Twitter, TikTok, YouTube, site)
-**Plans**: TBD
+**Plans**: 7 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Esqueleto: apps/api, Postgres migrado, cadastro/login/JWT reais
+- [ ] 01-02-PLAN.md — Esqueleto: apps/web, sessão em localStorage, criar conta e permanecer logado
+- [ ] 01-03-PLAN.md — Slice: criar o cartão com slug único (reservados + unicidade no banco) e identidade
+- [ ] 01-04-PLAN.md — Slice: canais de contato com WhatsApp normalizado para DDI 55
+- [ ] 01-05-PLAN.md — Slice: chave Pix validada por tipo com consentimento de CPF verificado no servidor
+- [ ] 01-06-PLAN.md — Slice: foto do cartão via Vercel Blob e placeholder de iniciais
+- [ ] 01-07-PLAN.md — Slice: links sociais reordenáveis + passagem manual end-to-end da fase
+
 **UI hint**: yes
 
 ### Phase 2: Cartão Público no Ar
@@ -81,7 +91,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conta e Cartão | 0/TBD | Not started | - |
+| 1. Conta e Cartão | 0/7 | Planned | - |
 | 2. Cartão Público no Ar | 0/TBD | Not started | - |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |
