@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text;
 using System.Text.RegularExpressions;
 using Api.Contracts;
 using Api.Data;
@@ -27,7 +28,10 @@ public static class AuthEndpoints
         if (string.IsNullOrWhiteSpace(request.Email) || !EmailRegex.IsMatch(request.Email))
             return Results.BadRequest(new { error = "invalid_email" });
 
-        if (string.IsNullOrWhiteSpace(request.Password) || request.Password.Length < 8)
+        // Teto de 72 bytes (WR-02) -- BCrypt trunca silenciosamente alem disso, entao sem
+        // este limite duas senhas diferentes que compartilham os mesmos 72 bytes iniciais
+        // autenticariam identicamente.
+        if (string.IsNullOrWhiteSpace(request.Password) || request.Password.Length < 8 || Encoding.UTF8.GetByteCount(request.Password) > 72)
             return Results.BadRequest(new { error = "invalid_password" });
 
         // Normaliza para minusculas antes de comparar/persistir (CR-01) -- "email unico" so
