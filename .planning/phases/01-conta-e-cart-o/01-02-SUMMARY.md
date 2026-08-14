@@ -99,7 +99,7 @@ completed: 2026-08-14
 1. **Task 1: Scaffold apps/web (Next.js, shadcn, Vitest)** -- `5e86416` (feat)
 2. **Task 2: API client with Bearer auth + 401 interceptor, token storage** -- `4352ddb` (feat)
 3. **Task 3: Register/login/dashboard screens + session guard** -- `b21860a` (feat)
-4. **Task 4: Checkpoint (human-verify, blocking)** -- NOT YET RUN, see below
+4. **Task 4: Checkpoint (human-verify, blocking)** -- Developer confirmed "aprovado" (manual browser walkthrough passed)
 
 ## Files Created/Modified
 
@@ -172,14 +172,14 @@ None for this plan's automated tasks. Task 4 (below) requires the developer to m
 
 ## Next Phase Readiness
 
-- **Task 4 (checkpoint:human-verify, gate="blocking") has NOT been executed.** This is a genuine manual-browser checkpoint (DevTools Application-tab inspection, visual redirect confirmation, F5 session-persistence check) that cannot be automated by this executor. The plan's own `<how-to-verify>` gives the developer the exact 10 steps and startup commands.
-- All automated prerequisites for that checkpoint are in place and verified working: `docker compose up -d db`, `dotnet run --project apps/api`, `cd apps/web && npm run dev` all start cleanly; the register -> token -> dashboard -> reload -> logout -> 401-redirect flow was proven at the API level end-to-end in this plan's own verification pass.
-- Once Task 4 is approved by the developer, plan `01-03` (card slug + identity) can proceed -- it is the next plan in the sequence and depends on this walking skeleton being closed.
-- No blockers for `01-03` beyond the pending Task 4 sign-off.
+- **Task 4 (checkpoint:human-verify, gate="blocking") approved by the developer** ("aprovado") -- the manual browser walkthrough (DevTools Application-tab inspection, visual redirect confirmation, F5 session-persistence check) passed.
+- All automated prerequisites for that checkpoint were in place and verified working: `docker compose up -d db`, `dotnet run --project apps/api`, `cd apps/web && npm run dev` all start cleanly; the register -> token -> dashboard -> reload -> logout -> 401-redirect flow was proven at the API level end-to-end in this plan's own verification pass.
+- Plan `01-03` (card slug + identity) can now proceed -- it is the next plan in the sequence and depended on this walking skeleton being closed.
+- No blockers remaining for `01-03`.
 
 ---
 *Phase: 01-conta-e-cart-o*
-*Completed: 2026-08-14 (Tasks 1-3; Task 4 pending human verification)*
+*Completed: 2026-08-14 (Tasks 1-4, human verification approved)*
 
 ## Self-Check: PASSED
 
