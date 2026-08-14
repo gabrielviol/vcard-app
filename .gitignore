@@ -1,0 +1,18 @@
+# Environment
+.env
+.env.local
+
+# .NET
+**/bin/
+**/obj/
+apps/api/**/bin/
+apps/api/**/obj/
+
+# Node
+node_modules/
+apps/web/.next/
+apps/web/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

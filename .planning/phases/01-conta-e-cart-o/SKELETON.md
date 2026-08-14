@@ -32,11 +32,11 @@ O esqueleto é entregue pelos planos `01-01` (backend, banco, migration, auth) e
 
 ## Stack Touched in Phase 1
 
-- [ ] Project scaffold — `apps/api` (.NET 10 + solution + Api.Tests), `apps/web` (create-next-app + shadcn + Vitest), `docker-compose.yml`
-- [ ] Routing — `/health`, `/auth/*`, `/cards/*` no backend; `/login`, `/register`, `/dashboard`, `/dashboard/cards/new`, `/dashboard/cards/[id]/edit`, `/api/upload` no frontend
-- [ ] Database — leitura real (`GET /auth/me`, `GET /cards/me`) e escrita real (`POST /auth/register`, `POST /cards`, `PUT /cards/{id}`) contra Postgres migrado
-- [ ] UI — formulário de criar conta e formulário de cartão em tela única, ambos ligados à API por `lib/api-client.ts` com header `Authorization`
-- [ ] Deployment — comando local de stack completa documentado: `docker compose up -d db` + `dotnet run --project apps/api` + `cd apps/web && npm run dev`
+- [x] Project scaffold — `apps/api` (.NET 10 + solution + Api.Tests) e `docker-compose.yml` entregues no plano `01-01`; `apps/web` (create-next-app + shadcn + Vitest) pendente no plano `01-02`
+- [x] Routing — `/health`, `/auth/register`, `/auth/login`, `/auth/me` no backend entregues no plano `01-01`; grupo `/cards` criado com `.RequireAuthorization()` e um placeholder `POST /cards` (501, apenas para ancorar o teste de ACCT-05 — handler real entra no plano `01-03`); rotas do frontend (`/login`, `/register`, `/dashboard`, ...) pendentes no plano `01-02`
+- [x] Database — leitura real (`GET /auth/me`) e escrita real (`POST /auth/register`) entregues no plano `01-01` contra Postgres migrado (4 tabelas); `GET /cards/me`, `POST /cards`, `PUT /cards/{id}` pendentes no plano `01-03`
+- [ ] UI — formulário de criar conta e formulário de cartão em tela única, ambos ligados à API por `lib/api-client.ts` com header `Authorization` — pendente, plano `01-02`
+- [ ] Deployment — comando local de stack completa documentado: `docker compose up -d db` + `dotnet run --project apps/api` operacionais desde o plano `01-01`; `cd apps/web && npm run dev` pendente no plano `01-02`
 
 ## Out of Scope (Deferred to Later Slices)
 
