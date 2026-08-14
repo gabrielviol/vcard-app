@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-08-13T23:27:25.423Z"
-last_activity: 2026-08-13 — Roadmap criado (4 fases, 43/43 requisitos v1 mapeados)
+status: executing
+stopped_at: Phase 1 UI-SPEC approved
+last_updated: "2026-08-14T00:44:32.699Z"
+last_activity: 2026-08-14 -- Phase 01 planning complete
 progress:
   total_phases: 4
   completed_phases: 0
-  total_plans: 0
+  total_plans: 7
   completed_plans: 0
   percent: 0
 ---
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-08-13)
 
 Phase: 1 of 4 (Conta e Cartão)
 Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-08-13 — Roadmap criado (4 fases, 43/43 requisitos v1 mapeados)
+Status: Ready to execute
+Last activity: 2026-08-14 -- Phase 01 planning complete
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -77,6 +77,7 @@ None yet.
 - Fase 2 (cartão público + ISR + cold start) é a decisão mais arriscada do projeto segundo research/ARCHITECTURE.md — validar localmente a precedência de rotas estáticas vs. dinâmicas (`/login` vs `/[slug]`) antes de confiar nisso estruturalmente.
 - Fase 3 (WhatsApp/Pix/.vcf em WebView) exige teste manual real dentro do app do Instagram/WhatsApp — não há documentação oficial da Meta sobre esse comportamento.
 - BRAND-01 depende de ação externa do usuário (registrar domínio) — pode ter lead time fora do controle do dev; iniciar cedo.
+- **Override registrado (Fase 1, planejamento):** o gate mecânico `check.decision-coverage-plan` reportou 11/13 decisões D-NN de `01-CONTEXT.md` como não cobertas, mesmo após citações explícitas `D-NN:` serem adicionadas ao objective de cada plan — o resultado do comando ficou idêntico byte-a-byte antes e depois da edição, e não foi possível localizar a implementação de `decision-coverage-plan` em nenhum arquivo instalado do `gsd-sdk`/`get-shit-done` (indício de bug/cache stale na ferramenta, não de lacuna real). O gate semântico `gsd-plan-checker` (revisão completa dos 7 planos, rodada 2x) confirmou explicitamente as 13 decisões cobertas com plan/task específico. Prosseguido com override (opção 3 do step 13a) dado o modo yolo.
 
 ## Deferred Items
 
@@ -88,6 +89,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-13T23:27:25.404Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-conta-e-cart-o/01-CONTEXT.md
+Last session: 2026-08-13T23:46:54.696Z
+Stopped at: Phase 1 UI-SPEC approved
+Resume file: .planning/phases/01-conta-e-cart-o/01-UI-SPEC.md
