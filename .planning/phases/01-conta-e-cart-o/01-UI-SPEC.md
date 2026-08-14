@@ -2,7 +2,7 @@
 phase: 1
 slug: conta-e-cartao
 status: draft
-shadcn_initialized: false
+shadcn_initialized: true
 preset: "new-york / zinc / css-variables"
 created: 2026-08-13
 ---

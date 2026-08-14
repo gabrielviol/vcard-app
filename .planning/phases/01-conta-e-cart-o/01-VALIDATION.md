@@ -3,7 +3,7 @@ phase: 1
 slug: conta-e-cartao
 status: draft
 nyquist_compliant: false
-wave_0_infra_complete: false
+wave_0_infra_complete: true
 wave_0_complete: false
 created: 2026-08-13
 ---
