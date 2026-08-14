@@ -14,20 +14,19 @@ Alguém recebe o cartão (por QR ou link) e consegue **te chamar ou te pagar em 
 
 ### Validated
 
-(Nenhum ainda — só valida depois de ir pro ar)
+- [x] Cadastro, login e sessão via JWT (specs 01/02 já escritas) — Phase 1
+- [x] Dono cria e edita seu cartão pelo dashboard (nome, cargo, empresa, foto, contatos) — Phase 1
+- [x] Links sociais ordenáveis (Instagram, LinkedIn, Twitter, TikTok, YouTube, site) — Phase 1
 
 ### Active
 
-- [ ] Dono cria e edita seu cartão pelo dashboard (nome, cargo, empresa, foto, contatos)
 - [ ] Cartão público acessível por slug próprio (ex: `/gabriel`), renderizado rápido em celular
 - [ ] Botão de WhatsApp que abre conversa direta com o dono do cartão
 - [ ] Chave Pix copiável em um toque na página pública
-- [ ] Links sociais ordenáveis (Instagram, LinkedIn, Twitter, TikTok, YouTube, site)
 - [ ] QR code gerado do cartão, exibível na tela e baixável para impressão
 - [ ] Preview de link (OG image + título) correto quando o cartão é compartilhado no WhatsApp
 - [ ] Botão "salvar contato" que baixa o `.vcf` com os dados do cartão
 - [ ] Registro de visualizações do cartão (`CardView`) e contagem visível pro dono
-- [ ] Cadastro, login e sessão via JWT (specs 01/02 já escritas)
 - [ ] Marca do produto visível no rodapé do cartão gratuito (`is_branded`)
 - [ ] Botão "remover marca" que registra intenção de upgrade sem cobrar — o sinal de validação
 
@@ -82,10 +81,10 @@ Alguém recebe o cartão (por QR ou link) e consegue **te chamar ou te pagar em 
 | Sem checkout na v1; botão de upgrade só mede intenção | Construir billing antes de saber se alguém quer pagar é a ordem errada. O clique no botão é o sinal barato. | — Pending |
 | Sinal de validação = intenção de pagar registrada | Sinal original era "primeiro pagante", mas a v1 não tem como cobrar. Medir intenção é o proxy honesto e possível. | — Pending |
 | QR code é o corte prioritário | Sem QR não substitui o cartão de papel; sem cartão circulando não há o que medir. Fica acima até do botão de upgrade. | — Pending |
-| WhatsApp e Pix como campos próprios, não `SocialLink` | São a tese do produto, não decoração. Tratá-los como links genéricos apagaria a diferenciação. | — Pending |
-| Stack Next.js + .NET + Postgres | Stack que o dev já domina no dia a dia — velocidade importa mais que escolha ótima na janela curta. | — Pending |
-| 1 cartão por usuário na v1 | Múltiplos cartões é feature do plano pago; o schema já suporta, então não há custo em adiar. | — Pending |
-| Monorepo sem ferramenta de workspace | Dois projetos de linguagens diferentes; Turborepo/Lerna não agregam. | — Pending |
+| WhatsApp e Pix como campos próprios, não `SocialLink` | São a tese do produto, não decoração. Tratá-los como links genéricos apagaria a diferenciação. | Confirmado — Phase 1 implementou `whatsapp_number`/`pix_key`/`pix_key_type` como colunas dedicadas em `cards`, separadas de `social_links` |
+| Stack Next.js + .NET + Postgres | Stack que o dev já domina no dia a dia — velocidade importa mais que escolha ótima na janela curta. | Confirmado — Phase 1 (7 planos) construído e testado nessa stack sem atrito, 90/90 xUnit + 54/54 Vitest verdes |
+| 1 cartão por usuário na v1 | Múltiplos cartões é feature do plano pago; o schema já suporta, então não há custo em adiar. | Confirmado — índice único em `cards.user_id`, erro `card_exists` distinto de `slug_taken` na criação (Phase 1, WR-01) |
+| Monorepo sem ferramenta de workspace | Dois projetos de linguagens diferentes; Turborepo/Lerna não agregam. | Confirmado — `apps/web` e `apps/api` convivem sem fricção via 7 planos da Phase 1 |
 
 ## Evolution
 
@@ -105,4 +104,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-13 after initialization*
+*Last updated: 2026-08-14 after Phase 1 (Conta e Cartão) completion*
