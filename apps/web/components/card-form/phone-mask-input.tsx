@@ -2,9 +2,8 @@
 
 import { IMaskInput } from "react-imask";
 import type { MaskedDynamic } from "imask";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, type FieldPath } from "react-hook-form";
 import type { CardFormValues } from "@/lib/card-schema";
-import { formatWhatsappPreview, isValidWhatsapp } from "@/lib/whatsapp-normalize";
 import {
   FormControl,
   FormField,
@@ -15,40 +14,52 @@ import {
 
 // Mascara dinamica BR: alterna entre 10 e 11 digitos (fixo/8-digitos vs celular com o
 // nono digito) conforme a quantidade de digitos ja preenchidos, usando o mecanismo de
-// `dispatch` do imask para trocar de mascara em tempo real (D-11).
-const whatsappMask = [{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }];
+// `dispatch` do imask para trocar de mascara em tempo real.
+const brPhoneMask = [{ mask: "(00) 0000-0000" }, { mask: "(00) 00000-0000" }];
 
-function dispatchWhatsappMask(appended: string, dynamicMasked: MaskedDynamic) {
+function dispatchBrPhoneMask(appended: string, dynamicMasked: MaskedDynamic) {
   const digits = `${dynamicMasked.value}${appended}`.replace(/\D/g, "");
   return digits.length > 10
     ? dynamicMasked.compiledMasks[1]
     : dynamicMasked.compiledMasks[0];
 }
 
-// Campo de WhatsApp com mascara brasileira ao vivo e previa do formato final
-// normalizado (D-11). O valor do form permanece o texto digitado (com mascara) -- a
-// normalizacao para digito puro + DDI 55 que de fato e persistida acontece no servidor
-// (WhatsappNormalizer.Normalize), nao aqui.
-export function WhatsappInput() {
+type PhoneMaskInputProps = {
+  name: FieldPath<CardFormValues>;
+  label: string;
+  /** Mensagem exibida em tempo real quando `isValid` retorna false. Opcional -- sem ela, o campo só mostra erro via FormMessage (validação do schema, só após tentativa de salvar). */
+  isValid?: (value: string) => boolean;
+  invalidMessage?: string;
+};
+
+// Campo de telefone com mascara brasileira ao vivo. Compartilhado entre "Telefone" e
+// "WhatsApp" na secao de Contato para que os dois tenham a mesma formatacao.
+export function PhoneMaskInput({
+  name,
+  label,
+  isValid,
+  invalidMessage,
+}: PhoneMaskInputProps) {
   const form = useFormContext<CardFormValues>();
 
   return (
     <FormField
       control={form.control}
-      name="whatsappNumber"
+      name={name}
       render={({ field }) => {
-        const value = field.value ?? "";
+        const value = typeof field.value === "string" ? field.value : "";
         const filled = value.trim().length > 0;
-        const valid = !filled || isValidWhatsapp(value);
-        const preview = filled && valid ? formatWhatsappPreview(value) : "";
+        const showInvalid = Boolean(
+          isValid && invalidMessage && filled && !isValid(value),
+        );
 
         return (
           <FormItem>
-            <FormLabel>WhatsApp</FormLabel>
+            <FormLabel>{label}</FormLabel>
             <FormControl>
               <IMaskInput
-                mask={whatsappMask}
-                dispatch={dispatchWhatsappMask}
+                mask={brPhoneMask}
+                dispatch={dispatchBrPhoneMask}
                 value={value}
                 unmask={false}
                 onAccept={(maskedValue: string) => field.onChange(maskedValue)}
@@ -59,15 +70,8 @@ export function WhatsappInput() {
                 className="flex h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
               />
             </FormControl>
-            {filled && !valid && (
-              <p className="text-sm leading-[1.5] text-red-600">
-                Número de WhatsApp inválido.
-              </p>
-            )}
-            {filled && valid && preview && (
-              <p className="text-sm font-semibold leading-[1.5] text-zinc-600">
-                Vai ser salvo como: {preview}
-              </p>
+            {showInvalid && (
+              <p className="text-sm leading-[1.5] text-red-600">{invalidMessage}</p>
             )}
             <FormMessage />
           </FormItem>

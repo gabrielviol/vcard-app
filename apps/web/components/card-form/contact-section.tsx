@@ -10,10 +10,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { WhatsappInput } from "@/components/card-form/whatsapp-input";
+import { PhoneMaskInput } from "@/components/card-form/phone-mask-input";
+import { isValidWhatsapp } from "@/lib/whatsapp-normalize";
 
-// Telefone, e-mail e WhatsApp -- todos opcionais (D-04). O WhatsApp tem seu proprio
-// componente (mascara + previa, D-11); telefone e e-mail sao inputs simples ligados
+// Telefone, e-mail e WhatsApp -- todos opcionais (D-04). Telefone e WhatsApp usam o
+// mesmo componente de mascara BR (mesma formatacao); e-mail e um input simples ligado
 // pelo mesmo useFormContext usado no resto da tela unica (D-03).
 export function ContactSection() {
   const form = useFormContext<CardFormValues>();
@@ -21,24 +22,7 @@ export function ContactSection() {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-[20px] font-semibold leading-[1.2]">Contato</h2>
-      <FormField
-        control={form.control}
-        name="phone"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Telefone</FormLabel>
-            <FormControl>
-              <Input
-                type="tel"
-                autoComplete="tel"
-                {...field}
-                value={field.value ?? ""}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <PhoneMaskInput name="phone" label="Telefone" />
       <FormField
         control={form.control}
         name="email"
@@ -57,7 +41,12 @@ export function ContactSection() {
           </FormItem>
         )}
       />
-      <WhatsappInput />
+      <PhoneMaskInput
+        name="whatsappNumber"
+        label="WhatsApp"
+        isValid={isValidWhatsapp}
+        invalidMessage="Número de WhatsApp inválido."
+      />
     </section>
   );
 }

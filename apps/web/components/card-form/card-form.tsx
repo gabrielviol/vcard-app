@@ -7,6 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { cardSchema, type CardFormValues } from "@/lib/card-schema";
 import { PIX_ERROR_MESSAGES, type PixKeyType } from "@/lib/pix-validation";
+import { ApiError, apiFetch } from "@/lib/api-client";
+import { clearToken } from "@/lib/auth-storage";
+import { Button } from "@/components/ui/button";
+import { SlugField } from "@/components/card-form/slug-field";
+import { IdentitySection } from "@/components/card-form/identity-section";
+import { ContactSection } from "@/components/card-form/contact-section";
+import { PixSection } from "@/components/card-form/pix-section";
+import { SocialLinksSection } from "@/components/card-form/social-links-section";
 
 const KNOWN_PIX_TYPES: readonly PixKeyType[] = ["cpf", "cnpj", "email", "telefone", "aleatoria"];
 
@@ -17,14 +25,6 @@ const KNOWN_PIX_TYPES: readonly PixKeyType[] = ["cpf", "cnpj", "email", "telefon
 function toPixKeyType(value: string | null | undefined): PixKeyType | "" {
   return KNOWN_PIX_TYPES.includes(value as PixKeyType) ? (value as PixKeyType) : "";
 }
-import { ApiError, apiFetch } from "@/lib/api-client";
-import { clearToken } from "@/lib/auth-storage";
-import { Button } from "@/components/ui/button";
-import { SlugField } from "@/components/card-form/slug-field";
-import { IdentitySection } from "@/components/card-form/identity-section";
-import { ContactSection } from "@/components/card-form/contact-section";
-import { PixSection } from "@/components/card-form/pix-section";
-import { SocialLinksSection } from "@/components/card-form/social-links-section";
 
 export type SocialLink = {
   id: string;
