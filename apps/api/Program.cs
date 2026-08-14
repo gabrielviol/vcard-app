@@ -1,8 +1,10 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Api.Data;
 using Api.Endpoints;
 using Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -43,6 +45,22 @@ builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddScoped<AuthService>();
 
+// Limitador fixed-window por IP (WR-03) -- generoso o suficiente para nao incomodar
+// uso legitimo na janela de MVP, mas fecha a exposicao de brute-force/credential-stuffing
+// sem estado/lockout em /auth/login.
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("login", httpContext => RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = 10,
+            Window = TimeSpan.FromMinutes(1),
+            QueueLimit = 0,
+        }));
+});
+
 var webOrigin = builder.Configuration["Cors:WebOrigin"]
     ?? throw new InvalidOperationException("Cors__WebOrigin not set");
 
@@ -61,6 +79,7 @@ var app = builder.Build();
 app.UseCors("web");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 
 app.MapGet("/health", async (AppDbContext db) =>
 {

@@ -5,6 +5,7 @@ using Api.Contracts;
 using Api.Data;
 using Api.Data.Entities;
 using Api.Services;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -19,7 +20,7 @@ public static class AuthEndpoints
     public static void MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapPost("/auth/register", RegisterHandler);
-        app.MapPost("/auth/login", LoginHandler);
+        app.MapPost("/auth/login", LoginHandler).RequireRateLimiting("login");
         app.MapGet("/auth/me", MeHandler).RequireAuthorization();
     }
 
