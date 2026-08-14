@@ -16,10 +16,10 @@ Nome e domínio saíram de "pendência" para caminho crítico quando marca + int
 
 ### Conta (ACCT)
 
-- [ ] **ACCT-01**: Visitante cria conta com e-mail e senha, com senha armazenada como hash BCrypt
-- [ ] **ACCT-02**: Usuário faz login com e-mail e senha e recebe um access token JWT
-- [ ] **ACCT-03**: Usuário permanece autenticado ao navegar e ao recarregar o dashboard
-- [ ] **ACCT-04**: Usuário é redirecionado para `/login` quando o token está ausente ou expirado
+- [x] **ACCT-01**: Visitante cria conta com e-mail e senha, com senha armazenada como hash BCrypt
+- [x] **ACCT-02**: Usuário faz login com e-mail e senha e recebe um access token JWT
+- [x] **ACCT-03**: Usuário permanece autenticado ao navegar e ao recarregar o dashboard
+- [x] **ACCT-04**: Usuário é redirecionado para `/login` quando o token está ausente ou expirado
 - [ ] **ACCT-05**: Rotas de escrita de Card, SocialLink e views retornam 401 sem token válido
 
 ### Cartão (CARD)
@@ -129,10 +129,10 @@ Preenchido durante a criação do roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ACCT-01 | Phase 1 | Pending |
-| ACCT-02 | Phase 1 | Pending |
-| ACCT-03 | Phase 1 | Pending |
-| ACCT-04 | Phase 1 | Pending |
+| ACCT-01 | Phase 1 | Complete |
+| ACCT-02 | Phase 1 | Complete |
+| ACCT-03 | Phase 1 | Complete |
+| ACCT-04 | Phase 1 | Complete |
 | ACCT-05 | Phase 1 | Pending |
 | CARD-01 | Phase 1 | Pending |
 | CARD-02 | Phase 1 | Pending |
