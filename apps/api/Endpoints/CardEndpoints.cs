@@ -89,9 +89,16 @@ public static class CardEndpoints
         {
             await db.SaveChangesAsync();
         }
-        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: "23505" })
+        catch (DbUpdateException ex) when (ex.InnerException is PostgresException { SqlState: "23505" } pg)
         {
-            return Results.Conflict(new { error = "slug_taken" });
+            // Duas constraints unicas colidem com 23505 aqui: IX_cards_slug e
+            // IX_cards_user_id (WR-01). O pre-check acima cobre o caso comum de corrida
+            // no user_id, mas nao fecha a janela TOCTOU entre o pre-check e o insert --
+            // inspeciona a constraint violada para nao reportar "slug_taken" quando o
+            // slug estava livre e a corrida real foi no user_id (ex: duplo submit).
+            return pg.ConstraintName == "IX_cards_user_id"
+                ? Results.Conflict(new { error = "card_exists" })
+                : Results.Conflict(new { error = "slug_taken" });
         }
 
         return Results.Created($"/cards/{card.Id}", ToResponseDto(card));
