@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Walking Skeleton human verification passed, Wave 4 unblocked
-last_updated: "2026-08-14T14:05:00.000Z"
-last_activity: 2026-08-14 -- Walking Skeleton checkpoint (01-02 Task 4) run and passed, all 10 steps green including BCrypt hash check
+stopped_at: Phase 1 UI-SPEC approved
+last_updated: "2026-08-14T14:16:58.540Z"
+last_activity: 2026-08-14 -- Phase 01 execution started
 progress:
   total_phases: 4
   completed_phases: 0
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-08-13)
 
 ## Current Position
 
-Phase: 01 (conta-e-cart-o) — EXECUTING, Wave 4 ready to start
-Plan: 3 of 7 complete (01-01, 01-02, 01-03)
-Status: Walking Skeleton fully closed (01-02 Task 4 passed 2026-08-14). Wave 4 (01-04: contato + WhatsApp normalizado) unblocked.
-Last activity: 2026-08-14 -- Walking Skeleton human-verify checkpoint (01-02 Task 4) run and passed: all 10 manual steps green, including BCrypt password hash confirmed in Postgres
+Phase: 01 (conta-e-cart-o) — EXECUTING
+Plan: 1 of 7
+Status: Executing Phase 01
+Last activity: 2026-08-14 -- Phase 01 execution started
 
 Progress: [████░░░░░░] 43%
 

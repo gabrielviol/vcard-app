@@ -51,7 +51,7 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 01-04-PLAN.md — Slice: canais de contato com WhatsApp normalizado para DDI 55
+- [x] 01-04-PLAN.md — Slice: canais de contato com WhatsApp normalizado para DDI 55
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Conta e Cartão | 3/7 | In Progress|  |
+| 1. Conta e Cartão | 4/7 | In Progress|  |
 | 2. Cartão Público no Ar | 0/TBD | Not started | - |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |
