@@ -1,16 +1,29 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { cardSchema, type CardFormValues } from "@/lib/card-schema";
+import { PIX_ERROR_MESSAGES, type PixKeyType } from "@/lib/pix-validation";
+
+const KNOWN_PIX_TYPES: readonly PixKeyType[] = ["cpf", "cnpj", "email", "telefone", "aleatoria"];
+
+// O DTO do backend tipa pixKeyType como string solta (apps/api/Contracts/CardDtos.cs); o
+// schema do form exige um dos 5 literais conhecidos ou "". Um cartao ja salvo sempre tem um
+// tipo valido (o servidor recusa qualquer outro via pix_type_invalid), mas o cast aqui e
+// defensivo -- um valor inesperado vira "" em vez de quebrar o formulario.
+function toPixKeyType(value: string | null | undefined): PixKeyType | "" {
+  return KNOWN_PIX_TYPES.includes(value as PixKeyType) ? (value as PixKeyType) : "";
+}
 import { ApiError, apiFetch } from "@/lib/api-client";
 import { clearToken } from "@/lib/auth-storage";
 import { Button } from "@/components/ui/button";
 import { SlugField } from "@/components/card-form/slug-field";
 import { IdentitySection } from "@/components/card-form/identity-section";
 import { ContactSection } from "@/components/card-form/contact-section";
+import { PixSection } from "@/components/card-form/pix-section";
 
 export type SocialLink = {
   id: string;
@@ -56,7 +69,7 @@ function toDefaultValues(initialCard?: CardResponseDto): CardFormValues {
     email: initialCard?.email ?? "",
     whatsappNumber: initialCard?.whatsappNumber ?? "",
     pixKey: initialCard?.pixKey ?? "",
-    pixKeyType: initialCard?.pixKeyType ?? "",
+    pixKeyType: toPixKeyType(initialCard?.pixKeyType),
     pixConsentConfirmed: initialCard?.pixConsentConfirmed ?? false,
   };
 }
@@ -75,6 +88,7 @@ function ReservedSection({ title }: { title: string }) {
 
 export function CardForm({ mode, initialCard }: CardFormProps) {
   const router = useRouter();
+  const [pixReopenSignal, setPixReopenSignal] = useState(0);
 
   const form = useForm<CardFormValues>({
     resolver: zodResolver(cardSchema),
@@ -131,6 +145,27 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
         });
         return;
       }
+      if (error instanceof ApiError && error.code === "pix_key_invalid") {
+        const type = form.getValues("pixKeyType") as PixKeyType | "" | undefined;
+        form.setError("pixKey", {
+          type: "server",
+          message: (type && PIX_ERROR_MESSAGES[type]) || "Chave Pix inválida.",
+        });
+        return;
+      }
+      if (error instanceof ApiError && error.code === "pix_type_invalid") {
+        form.setError("pixKeyType", {
+          type: "server",
+          message: "Tipo de chave Pix inválido.",
+        });
+        return;
+      }
+      if (error instanceof ApiError && error.code === "pix_consent_required") {
+        // Reabre o modal bloqueante de CPF (D-09) -- caminho defensivo, o cliente ja
+        // barra este estado antes do submit via superRefine em card-schema.ts.
+        setPixReopenSignal((n) => n + 1);
+        return;
+      }
       toast.error("Não foi possível salvar. Verifique sua conexão e tente novamente.");
     }
   }
@@ -155,7 +190,7 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
             <SlugField currentSlug={initialCard?.slug} />
             <IdentitySection />
             <ContactSection />
-            <ReservedSection title="Pix" />
+            <PixSection reopenConfirmSignal={pixReopenSignal} />
             <ReservedSection title="Links sociais" />
 
             <Button

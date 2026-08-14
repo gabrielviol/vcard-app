@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isValidWhatsapp } from "@/lib/whatsapp-normalize";
+import { isValidPixKey, PIX_ERROR_MESSAGES, type PixKeyType } from "@/lib/pix-validation";
 
 // Unicos campos obrigatorios sao slug e fullName (D-04) -- todo o resto fica opcional
 // desde ja para que os planos 04-07 apenas refinem regras (WhatsApp, Pix, links
@@ -31,9 +32,32 @@ export const cardSchema = z.object({
     .refine((value) => !value || isValidWhatsapp(value), {
       message: "Número de WhatsApp inválido.",
     }),
+  // Opcionais (D-04). pixKeyType so aceita os 5 valores conhecidos; pixKey e validada por
+  // tipo via superRefine abaixo (precisa dos dois campos juntos, discriminatedUnion sozinho
+  // nao da porque pixKeyType/pixKey convivem com o resto dos campos do cartao no mesmo objeto).
   pixKey: z.string().optional(),
-  pixKeyType: z.string().optional(),
+  pixKeyType: z.enum(["cpf", "cnpj", "email", "telefone", "aleatoria"]).optional().or(z.literal("")),
   pixConsentConfirmed: z.boolean().optional(),
+}).superRefine((values, ctx) => {
+  if (values.pixKey && values.pixKeyType) {
+    if (!isValidPixKey(values.pixKeyType as PixKeyType, values.pixKey)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["pixKey"],
+        message: PIX_ERROR_MESSAGES[values.pixKeyType as PixKeyType],
+      });
+    }
+
+    // Mesma regra do servidor (CARD-07/D-09): CPF preenchida exige consentimento
+    // explicito para que o botao de salvar reflita o estado real, nao so a UI do modal.
+    if (values.pixKeyType === "cpf" && !values.pixConsentConfirmed) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["pixConsentConfirmed"],
+        message: "Confirme que quer usar seu CPF como chave Pix.",
+      });
+    }
+  }
 });
 
 export type CardFormValues = z.infer<typeof cardSchema>;
