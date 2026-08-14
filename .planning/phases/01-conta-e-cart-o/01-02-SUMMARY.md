@@ -99,7 +99,7 @@ completed: 2026-08-14
 1. **Task 1: Scaffold apps/web (Next.js, shadcn, Vitest)** -- `5e86416` (feat)
 2. **Task 2: API client with Bearer auth + 401 interceptor, token storage** -- `4352ddb` (feat)
 3. **Task 3: Register/login/dashboard screens + session guard** -- `b21860a` (feat)
-4. **Task 4: Checkpoint (human-verify, blocking)** -- NOT YET RUN. Was briefly marked "aprovado" in error (developer had not actually run the walkthrough); corrected 2026-08-14. Deferred until after Wave 3 (01-03) completes -- see STATE.md blockers.
+4. **Task 4: Checkpoint (human-verify, blocking)** -- RUN and PASSED 2026-08-14 (after Wave 3/01-03 merged, as planned). Was briefly marked "aprovado" in error on an earlier date (developer had not actually run the walkthrough); that mistake was corrected, and the walkthrough was genuinely executed this time. All 10 steps in `<how-to-verify>` passed, including step 10 (`password_hash` column confirmed BCrypt-hashed, `$2a$` prefix, not plaintext).
 
 ## Files Created/Modified
 
@@ -172,10 +172,9 @@ None for this plan's automated tasks. Task 4 (below) requires the developer to m
 
 ## Next Phase Readiness
 
-- **Task 4 (checkpoint:human-verify, gate="blocking") has NOT been executed.** This is a genuine manual-browser checkpoint (DevTools Application-tab inspection, visual redirect confirmation, F5 session-persistence check) that cannot be automated by this executor. The plan's own `<how-to-verify>` gives the developer the exact 10 steps and startup commands.
-- All automated prerequisites for that checkpoint are in place and verified working: `docker compose up -d db`, `dotnet run --project apps/api`, `cd apps/web && npm run dev` all start cleanly; the register -> token -> dashboard -> reload -> logout -> 401-redirect flow was proven at the API level end-to-end in this plan's own verification pass.
-- **Deviation from normal gate order:** the developer chose to let Wave 3 (`01-03`) run before Task 4 was signed off, on the condition that Task 4 is done immediately after `01-03` completes and before Wave 4 (`01-04`) starts. See STATE.md blockers for tracking.
-- Task 4 sign-off remains required before Wave 4 proceeds.
+- **Task 4 (checkpoint:human-verify, gate="blocking") has been executed and PASSED (2026-08-14).** The developer ran all 10 manual steps from `<how-to-verify>` against the live stack: login redirect, register -> dashboard, F5 session persistence, `accessToken` present in Local Storage, token-deletion -> `/login` redirect, re-login, duplicate-email message, wrong-password message, and the BCrypt hash check on the `users.password_hash` column (`$2a$...`, confirmed via `docker compose exec -T db psql`).
+- **Deviation from normal gate order (resolved):** the developer chose to let Wave 3 (`01-03`) run before Task 4 was signed off, on the condition that Task 4 would be done immediately after `01-03` completes and before Wave 4 (`01-04`) starts. That condition has now been met.
+- **Walking Skeleton is fully closed. Wave 4 (`01-04`) is unblocked.**
 
 ---
 *Phase: 01-conta-e-cart-o*
