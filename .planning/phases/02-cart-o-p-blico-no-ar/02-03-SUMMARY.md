@@ -35,23 +35,23 @@ key-decisions:
 patterns-established:
   - "Pattern: not-found.tsx/error.tsx for a dynamic public segment mirror the segment's own page shell (min-h-screen bg-zinc-50 + mx-auto max-w-[480px] px-6 py-16) for visual family resemblance (D-22)"
 
-requirements-completed: []  # PUB-06 NOT marked complete — Task 2 (human verification of the true-404 HTTP status) has not been executed. See "Next Phase Readiness" below.
+requirements-completed: [PUB-06]
 
 # Metrics
-duration: partial (Task 1 only; Task 2 is a pending checkpoint)
+duration: ~25min
 completed: 2026-08-15
 ---
 
 # Phase 2 Plan 3: Cartão Público no Ar — 404 Brandada e Error Boundary Summary
 
-**Branded 404 (`Esse cartão não existe.` + CTA único para `/register`) e error boundary client-side para `/[slug]`, com `PRODUCT_NAME` centralizado em `lib/brand.ts` — Task 1 completa e commitada; Task 2 (verificação humana do status HTTP 404 real) permanece como checkpoint pendente, não resolvido nesta execução.**
+**Branded 404 (`Esse cartão não existe.` + CTA único para `/register`) e error boundary client-side para `/[slug]`, com `PRODUCT_NAME` centralizado em `lib/brand.ts` — status HTTP 404 real e precedência de rota estática confirmados por `curl -I` literal, fechando o bloqueio de STATE.md sobre `/login` vs `/[slug]`.**
 
 ## Performance
 
-- **Duration:** ~20 min (Task 1 only)
+- **Duration:** ~25 min
 - **Started:** 2026-08-15T09:30:00-03:00 (approx)
-- **Completed (Task 1):** 2026-08-15T09:50:00-03:00 (approx)
-- **Tasks:** 1 of 2 completed (Task 2 is a `checkpoint:human-verify gate="blocking"`)
+- **Completed:** 2026-08-15T10:20:00-03:00 (approx)
+- **Tasks:** 2 of 2 completed (Task 2 is a `checkpoint:human-verify gate="blocking"`, approved by human)
 - **Files modified:** 3 (all created)
 
 ## Accomplishments
@@ -66,7 +66,7 @@ Each task was committed atomically:
 
 1. **Task 1: 404 com a cara do produto e error boundary do segmento público** - `f730c19` (feat)
 
-Task 2 (`checkpoint:human-verify`, `gate="blocking"`) was **not executed** — see "Next Phase Readiness" / "Checkpoint Pending" below.
+Task 2 (`checkpoint:human-verify`, `gate="blocking"`) is verification-only per the plan — no code changes. Approved by human sign-off; see "Task 2 Verification Results" below.
 
 ## Files Created/Modified
 - `apps/web/lib/brand.ts` - `export const PRODUCT_NAME = "Vizzo"` with D-14 provisional-name comment and the three clean alternatives from `02-CONTEXT.md` (Cartaum, Pixtão, Umtoque)
@@ -101,7 +101,7 @@ Task 2 (`checkpoint:human-verify`, `gate="blocking"`) was **not executed** — s
 
 **Total deviations:** 2 auto-fixed (1 bug, 1 blocking/environment). No scope creep — both were required to make Task 1's own verify command pass.
 
-## Verification Results (Task 1 only)
+## Verification Results (Task 1 — automated)
 
 ```
 cd apps/web && npx tsc --noEmit           # exit 0, clean
@@ -121,33 +121,51 @@ None beyond the two auto-fixes documented above.
 
 ## User Setup Required
 
-None for Task 1 (no external services). **Task 2 requires the developer to run the local verification protocol described below.**
+None — no external service configuration required for this plan.
 
-## Checkpoint Pending — Task 2 Not Executed
+## Task 2 Verification Results — Checkpoint Approved
 
-**Task 2** (`checkpoint:human-verify`, `gate="blocking"`) requires standing up the full local stack (`docker compose up -d`, `dotnet run --project apps/api`, `apps/web` production build + start) and manually walking through 8 verification steps in a real browser, including a `curl -I` check that the true HTTP status on a nonexistent slug is `404` (not `200`, which would indicate the Pitfall-2 streaming regression) and that `/login`/`/register`/`/dashboard` still resolve to `200` (route-precedence check, resolves the open `.planning/STATE.md` blocker).
+**Task 2** (`checkpoint:human-verify`, `gate="blocking"`) required standing up the full local stack and manually walking through 8 verification steps from `02-03-PLAN.md`. This executor was not able to stand up the local stack itself in this worktree (host port `5432` was already bound by another process at the time — see prior deviation note above, retained for the record). The human ran the verification independently and approved the checkpoint, providing literal `curl -I` output for the two critical, plan-mandated checks:
 
-**Why this executor did not attempt it:** at the time of this run, host port `5432` (Postgres) was already bound by another process — `netstat` showed an active listener on `0.0.0.0:5432` before any command in this session touched Docker. This worktree's `docker-compose.yml` maps `5432:5432` on the host; starting `docker compose up -d` here would either fail outright (port already allocated) or, if it somehow succeeded, risk interfering with a concurrent process (a sibling parallel-executor worktree, or the user's own dev environment) also depending on that port. Given Phase 2 wave 2 runs multiple plans in parallel worktrees, and the plan document itself frames this task as requiring live browser interaction and DOM inspection across 8 steps that are inherently outside CLI-only automation, this was deferred rather than risking a port collision with concurrent execution.
+**Step 4 — Status 404 real (PUB-06, item crítico):**
+```
+$ curl -I http://localhost:3000/slug-que-nao-existe
+HTTP/1.1 404 Not Found
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+X-Powered-By: Next.js
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Content-Type: text/html; charset=utf-8
+```
+First line is `HTTP/1.1 404 Not Found` — confirms the true HTTP status on a nonexistent slug is a real 404, not the streamed-200 regression described in `02-RESEARCH.md` Pitfall 2. **This is the direct evidence backing `PUB-06` completion.**
 
-**What remains for Task 2 (verbatim from `02-03-PLAN.md`):**
-1. Cartão publicado — visual check on `/{slug}`, mobile viewport
-2. Cartão mínimo (D-20/D-21) — only initials+name render, no empty-state UI
-3. Seções vazias somem (D-19) — DOM inspection confirms no empty social-links container
-4. **Status 404 real (PUB-06, item crítico)** — `curl -I http://localhost:3000/slug-que-nao-existe` must return `HTTP/1.1 404 Not Found` as the first line
-5. Visual da 404 (D-22/D-23) — wordmark, headline, body, single indigo CTA to `/register`, no secondary link
-6. **Precedência de rotas estáticas** — `/login`, `/register`, `/dashboard` still resolve to the Phase 1 pages, `curl -I http://localhost:3000/login` returns `200` — resolves the `.planning/STATE.md` blocker
-7. Error boundary — kill the backend, wait for the 60s ISR window, confirm the fixed error copy renders with no leaked stack/URL/status
-8. ISR reflects edit (PUB-05) — edit name in dashboard, confirm propagation within 60s
+**Step 6 — Precedência de rotas estáticas:**
+```
+$ curl -I http://localhost:3000/login
+HTTP/1.1 200 OK
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+x-nextjs-cache: HIT
+x-nextjs-prerender: 1
+X-Powered-By: Next.js
+Cache-Control: s-maxage=31536000
+Content-Type: text/html; charset=utf-8
+```
+First line is `HTTP/1.1 200 OK` — confirms `/login` (a static route) resolves to the Phase 1 auth page and is not captured by the `/[slug]` dynamic segment. **This is the direct evidence closing the `.planning/STATE.md` blocker** ("validar localmente a precedência de rotas estáticas vs. dinâmicas (`/login` vs `/[slug]`) antes de confiar nisso estruturalmente").
 
-**Resume signal (from the plan):** "Responda 'approved' ou descreva qual dos 8 passos falhou, com o output observado."
+**Steps 1, 2, 3, 5, 7, 8 — approved by human sign-off without individually captured evidence.** The human replied "approved" after providing the two outputs above, without walking through or pasting per-step output for the remaining six steps (visual card rendering, minimal-card empty state, DOM inspection of vanished empty sections, 404 visual/copy check, error-boundary fallback behavior, ISR propagation timing). This summary does not claim those steps were individually verified with captured evidence — only that the checkpoint as a whole was approved by the human, with the two literal outputs above as the specific evidence provided.
+
+**Resume signal received:** "approved" (with the two `curl -I` outputs pasted above).
 
 ## Next Phase Readiness
 - Task 1's code (`lib/brand.ts`, `not-found.tsx`, `error.tsx`) is complete, committed (`f730c19`), and passes all automated verification (`tsc`, scoped `eslint`, `vitest`).
-- **`PUB-06` is NOT marked complete in this summary's frontmatter** — the requirement's acceptance criteria explicitly require the true-404 HTTP status check (Task 2 step 4), which was not executed.
-- **`.planning/STATE.md`'s open blocker** ("validar localmente a precedência de rotas estáticas vs. dinâmicas antes de confiar nisso estruturalmente") remains **unresolved** — Task 2 step 6 is the evidence that would close it.
-- No code-level blockers for 02-04/02-05/02-06 — they don't depend on Task 2's manual verification outcome, only on Task 1's shipped files existing, which they do.
-- Recommend running Task 2's 8-step protocol in an environment where ports 5432/5153/3000 are free (e.g., after this worktree merges into the integration branch, or in the user's own local environment) before considering `PUB-06` and the STATE.md blocker closed.
+- **`PUB-06` marked complete** — backed specifically by the Task 2 step 4 evidence (`curl -I` on a nonexistent slug returns `404` as the literal first line).
+- **`.planning/STATE.md`'s open blocker on static-route-vs-`/[slug]` precedence is resolved** — backed specifically by the Task 2 step 6 evidence (`curl -I /login` returns `200`).
+- Steps 1/2/3/5/7/8 of Task 2's protocol were covered by the human's overall "approved" sign-off, but do not have individually captured evidence in this summary — noted here for transparency, not treated as a blocker for this plan's completion since the plan's own `<resume-signal>` only requires "approved" or a description of what failed.
+- No blockers for 02-04/02-05/02-06 — both Task 1's shipped files and Task 2's critical-path verification (404 status, route precedence) are in place.
 
 ---
 *Phase: 02-cart-o-p-blico-no-ar*
-*Completed (Task 1 only): 2026-08-15*
+*Completed: 2026-08-15*
+
+## Self-Check: PASSED
+
+All created files verified present on disk (`apps/web/lib/brand.ts`, `apps/web/app/[slug]/not-found.tsx`, `apps/web/app/[slug]/error.tsx`); Task 1 commit `f730c19` verified present in `git log`.
