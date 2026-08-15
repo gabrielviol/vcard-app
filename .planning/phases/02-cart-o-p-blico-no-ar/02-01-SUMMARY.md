@@ -111,3 +111,7 @@ None - no external service configuration required for this plan. (Render/Neon/Ve
 ---
 *Phase: 02-cart-o-p-blico-no-ar*
 *Completed: 2026-08-15*
+
+## Self-Check: PASSED
+
+All created files verified present on disk; all 4 commits (`caedd0e`, `dc0031e`, `55f2265`, `97962e4`) verified present in `git log`.
