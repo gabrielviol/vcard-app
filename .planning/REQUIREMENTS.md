@@ -60,8 +60,8 @@ Nome e domínio saíram de "pendência" para caminho crítico quando marca + int
 
 ### Compartilhamento (SHARE)
 
-- [ ] **SHARE-01**: Dono visualiza o QR code do seu cartão na tela, em tamanho utilizável para alguém escanear na hora
-- [ ] **SHARE-02**: Dono baixa o QR code em resolução adequada para impressão
+- [x] **SHARE-01**: Dono visualiza o QR code do seu cartão na tela, em tamanho utilizável para alguém escanear na hora
+- [x] **SHARE-02**: Dono baixa o QR code em resolução adequada para impressão
 - [ ] **SHARE-03**: Link do cartão compartilhado no WhatsApp exibe preview correto (imagem, título e descrição do dono)
 - [ ] **SHARE-04**: Preview do link reflete edições do cartão, sem ficar preso em cache antigo
 - [ ] **SHARE-05**: Dono compartilha o próprio cartão via WhatsApp a partir do dashboard, com o link já preenchido
@@ -150,8 +150,8 @@ Preenchido durante a criação do roadmap.
 | PUB-04 | Phase 2 | Pending |
 | PUB-05 | Phase 2 | Pending |
 | PUB-06 | Phase 2 | Pending |
-| SHARE-01 | Phase 2 | Pending |
-| SHARE-02 | Phase 2 | Pending |
+| SHARE-01 | Phase 2 | Complete |
+| SHARE-02 | Phase 2 | Complete |
 | BRAND-01 | Phase 2 | Pending |
 | CONT-01 | Phase 3 | Pending |
 | CONT-02 | Phase 3 | Pending |
