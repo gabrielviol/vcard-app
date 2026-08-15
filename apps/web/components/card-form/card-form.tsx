@@ -9,12 +9,14 @@ import { cardSchema, type CardFormValues } from "@/lib/card-schema";
 import { PIX_ERROR_MESSAGES, type PixKeyType } from "@/lib/pix-validation";
 import { ApiError, apiFetch } from "@/lib/api-client";
 import { clearToken } from "@/lib/auth-storage";
+import { prewarmPublicCard } from "@/lib/prewarm";
 import { Button } from "@/components/ui/button";
 import { SlugField } from "@/components/card-form/slug-field";
 import { IdentitySection } from "@/components/card-form/identity-section";
 import { ContactSection } from "@/components/card-form/contact-section";
 import { PixSection } from "@/components/card-form/pix-section";
 import { SocialLinksSection } from "@/components/card-form/social-links-section";
+import { QrSection } from "@/components/card-form/qr-section";
 
 const KNOWN_PIX_TYPES: readonly PixKeyType[] = ["cpf", "cnpj", "email", "telefone", "aleatoria"];
 
@@ -110,6 +112,11 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
           method: "POST",
           body: JSON.stringify(payload),
         });
+        // Pre-aquecimento fire-and-forget (PUB-03): dispara um GET contra a URL
+        // publica que acabou de nascer, sem await e sem entrar na cadeia de
+        // ApiError abaixo -- prewarmPublicCard ja engole a propria falha, um ping
+        // que falha nunca pode virar erro de salvamento.
+        prewarmPublicCard(payload.slug);
         router.push(`/dashboard/cards/${created.id}/edit`);
         return;
       }
@@ -118,6 +125,10 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
         method: "PUT",
         body: JSON.stringify(payload),
       });
+      // Mesmo raciocinio do ramo de criacao acima: usa payload.slug (o que acabou de
+      // ser enviado), nao o slug original do cartao, porque o usuario pode ter
+      // trocado o slug neste mesmo save.
+      prewarmPublicCard(payload.slug);
       toast.success("Alterações salvas.");
     } catch (error) {
       if (error instanceof ApiError && error.code === "slug_taken") {
@@ -188,6 +199,7 @@ export function CardForm({ mode, initialCard }: CardFormProps) {
             <ContactSection />
             <PixSection reopenConfirmSignal={pixReopenSignal} />
             <SocialLinksSection cardId={initialCard?.id} initialLinks={initialCard?.socialLinks ?? []} />
+            <QrSection slug={initialCard?.slug} />
 
             <Button
               type="submit"
