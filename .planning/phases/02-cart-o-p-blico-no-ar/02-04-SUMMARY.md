@@ -142,3 +142,8 @@ None — no external service configuration required. Everything in this plan reu
 ---
 *Phase: 02-cart-o-p-blico-no-ar*
 *Completed: 2026-08-15*
+
+## Self-Check: PASSED
+
+All claimed files verified present: `apps/web/lib/prewarm.ts`, `apps/web/lib/prewarm.test.ts`, `apps/web/components/public-card/qr-preview.tsx`, `apps/web/components/card-form/qr-section.tsx`, `apps/web/components/card-form/card-form.tsx`, `.planning/phases/02-cart-o-p-blico-no-ar/deferred-items.md`, this SUMMARY.md.
+All claimed commit hashes verified present in git log: `8c3451b`, `faf4a76`, `b282d9b`, `c8e0662`, `67ced5d`.
