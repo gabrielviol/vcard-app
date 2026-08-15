@@ -42,7 +42,7 @@ Nome e domínio saíram de "pendência" para caminho crítico quando marca + int
 - [ ] **PUB-03**: Cartão recém-criado ou recém-editado é pré-aquecido no momento do save, para que o primeiro acesso ao slug não caia em cold start
 - [ ] **PUB-04**: Keep-alive externo mantém backend e banco acordados em intervalo regular
 - [ ] **PUB-05**: Edição feita no dashboard se reflete no cartão público sem exigir novo deploy
-- [ ] **PUB-06**: Slug inexistente retorna página 404 própria, não erro de servidor
+- [x] **PUB-06**: Slug inexistente retorna página 404 própria, não erro de servidor
 
 ### Contato (CONT)
 
@@ -149,7 +149,7 @@ Preenchido durante a criação do roadmap.
 | PUB-03 | Phase 2 | Pending |
 | PUB-04 | Phase 2 | Pending |
 | PUB-05 | Phase 2 | Pending |
-| PUB-06 | Phase 2 | Pending |
+| PUB-06 | Phase 2 | Complete |
 | SHARE-01 | Phase 2 | Complete |
 | SHARE-02 | Phase 2 | Complete |
 | BRAND-01 | Phase 2 | Pending |
