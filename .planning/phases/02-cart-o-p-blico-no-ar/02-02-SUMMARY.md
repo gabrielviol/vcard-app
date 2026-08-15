@@ -142,3 +142,8 @@ None - no external service configuration required. `NEXT_PUBLIC_APP_URL` is a lo
 ---
 *Phase: 02-cart-o-p-blico-no-ar*
 *Completed: 2026-08-15*
+
+## Self-Check: PASSED
+
+All claimed files verified present: `apps/web/lib/qr.ts`, `apps/web/lib/qr.test.ts`, `apps/web/lib/qr-route.test.ts`, `apps/web/app/[slug]/qr/route.ts`, this SUMMARY.md.
+All claimed commit hashes verified present in git log: `7edf768`, `7b16969`, `06b2325`, `a12df05`, `c3bfb5e`.
