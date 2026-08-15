@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 2 UI-SPEC approved
-last_updated: "2026-08-14T22:08:33.965Z"
-last_activity: 2026-08-14 -- Phase 02 planning complete
+stopped_at: Session resumed, proceeding to execute Phase 2
+last_updated: "2026-08-15T12:13:34.053Z"
+last_activity: 2026-08-15 -- Phase 02 execution started
 progress:
   total_phases: 4
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-13)
 
 **Core value:** Alguém recebe o cartão (por QR ou link) e consegue te chamar ou te pagar em um toque — sem sair da página, sem digitar nada, sem etapa intermediária.
-**Current focus:** Phase 2 — cartão público no ar
+**Current focus:** Phase 02 — cart-o-p-blico-no-ar
 
 ## Current Position
 
-Phase: 2
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-08-14 -- Phase 02 planning complete
+Phase: 02 (cart-o-p-blico-no-ar) — EXECUTING
+Plan: 1 of 6
+Status: Executing Phase 02
+Last activity: 2026-08-15 -- Phase 02 execution started
 
 Progress: [████░░░░░░] 43%
 
@@ -79,6 +79,7 @@ None yet.
 - BRAND-01 depende de ação externa do usuário (registrar domínio) — pode ter lead time fora do controle do dev; iniciar cedo.
 - **Override registrado (Fase 1, planejamento):** o gate mecânico `check.decision-coverage-plan` reportou 11/13 decisões D-NN de `01-CONTEXT.md` como não cobertas, mesmo após citações explícitas `D-NN:` serem adicionadas ao objective de cada plan — o resultado do comando ficou idêntico byte-a-byte antes e depois da edição, e não foi possível localizar a implementação de `decision-coverage-plan` em nenhum arquivo instalado do `gsd-sdk`/`get-shit-done` (indício de bug/cache stale na ferramenta, não de lacuna real). O gate semântico `gsd-plan-checker` (revisão completa dos 7 planos, rodada 2x) confirmou explicitamente as 13 decisões cobertas com plan/task específico. Prosseguido com override (opção 3 do step 13a) dado o modo yolo.
 - **RESOLVIDO 2026-08-14 — verificação manual do Walking Skeleton (plano 01-02, Task 4):** executada e aprovada. Os 10 passos do checklist (`01-02-PLAN.md` `<how-to-verify>`) passaram, incluindo a confirmação de que `password_hash` está em BCrypt (`$2a$...`) no Postgres. Walking Skeleton fechado; Wave 4 (01-04) liberada.
+- **Override registrado (Fase 2, planejamento):** o gate mecânico `check.decision-coverage-plan` reportou 4/10 decisões D-NN de `02-CONTEXT.md` (D-15, D-17, D-20, D-21) como não cobertas — mesmo padrão observado na Fase 1 (indício de bug/cache stale na ferramenta, não de lacuna real). Confirmado por grep que as 4 decisões estão citadas explicitamente por ID nos planos (D-15 em 02-02/02-05/02-06, D-17 em 02-02/02-04/02-06, D-20/D-21 em 02-01/02-03/02-06). O gate semântico `gsd-plan-checker` também confirmou explicitamente as 10 decisões cobertas, dimensão por dimensão. Prosseguido com override (opção 3 do step 13a) dado o modo yolo.
 
 ## Deferred Items
 
@@ -90,6 +91,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-14T21:31:08.015Z
-Stopped at: Phase 2 UI-SPEC approved
+Last session: 2026-08-15T00:00:00.000Z
+Stopped at: Session resumed, proceeding to execute Phase 2
 Resume file: .planning/phases/02-cart-o-p-blico-no-ar/02-UI-SPEC.md

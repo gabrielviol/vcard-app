@@ -86,8 +86,8 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — Slice: cartão público em `/[slug]` (endpoint sem auth + Server Component ISR)
-- [ ] 02-02-PLAN.md — Slice: QR gerado a partir do slug (rota SVG inline + download SVG/PNG)
+- [x] 02-01-PLAN.md — Slice: cartão público em `/[slug]` (endpoint sem auth + Server Component ISR)
+- [x] 02-02-PLAN.md — Slice: QR gerado a partir do slug (rota SVG inline + download SVG/PNG)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -142,6 +142,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Conta e Cartão | 7/7 | Complete   | 2026-08-14 |
-| 2. Cartão Público no Ar | 0/6 | Planned | - |
+| 2. Cartão Público no Ar | 2/6 | In Progress|  |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |
