@@ -89,6 +89,11 @@ app.MapGet("/health", async (AppDbContext db) =>
         : Results.Json(new { status = "error", database = "down" }, statusCode: 503);
 });
 
+// PUB-01/T-02-02: rota publica top-level em `app`, nunca dentro do grupo `cards`
+// abaixo -- `.RequireAuthorization()` e aplicado no nivel do grupo, entao qualquer
+// rota mapeada nele herdaria a exigencia de Bearer token (02-RESEARCH.md Pitfall 1).
+app.MapGet("/public/cards/{slug}", PublicCardEndpoints.GetBySlugHandler);
+
 app.MapAuthEndpoints();
 
 var cards = app.MapGroup("/cards").RequireAuthorization();
