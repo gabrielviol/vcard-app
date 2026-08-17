@@ -93,7 +93,7 @@ Plans:
 
 - [x] 02-03-PLAN.md — Slice: 404 com a cara do produto + error boundary do segmento público
 - [x] 02-04-PLAN.md — Slice: QR sempre visível na edição + pré-aquecimento no save
-- [ ] 02-05-PLAN.md — Slice: backend em produção (Render + Neon) + keep-alive externo
+- [x] 02-05-PLAN.md — Slice: backend em produção (Render + Neon) + keep-alive externo
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -142,6 +142,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Conta e Cartão | 7/7 | Complete   | 2026-08-14 |
-| 2. Cartão Público no Ar | 4/6 | In Progress|  |
+| 2. Cartão Público no Ar | 5/6 | In Progress|  |
 | 3. Contato, Pagamento e Compartilhamento | 0/TBD | Not started | - |
 | 4. Aprendizado e Monetização | 0/TBD | Not started | - |

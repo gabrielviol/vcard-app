@@ -40,7 +40,7 @@ Nome e domínio saíram de "pendência" para caminho crítico quando marca + int
 - [ ] **PUB-01**: Qualquer pessoa acessa o cartão em `/[slug]` sem autenticação, com layout mobile-first
 - [ ] **PUB-02**: Página pública é servida por ISR, sem depender do backend estar acordado a cada visita
 - [ ] **PUB-03**: Cartão recém-criado ou recém-editado é pré-aquecido no momento do save, para que o primeiro acesso ao slug não caia em cold start
-- [ ] **PUB-04**: Keep-alive externo mantém backend e banco acordados em intervalo regular
+- [x] **PUB-04**: Keep-alive externo mantém backend e banco acordados em intervalo regular
 - [ ] **PUB-05**: Edição feita no dashboard se reflete no cartão público sem exigir novo deploy
 - [x] **PUB-06**: Slug inexistente retorna página 404 própria, não erro de servidor
 
@@ -147,7 +147,7 @@ Preenchido durante a criação do roadmap.
 | PUB-01 | Phase 2 | Pending |
 | PUB-02 | Phase 2 | Pending |
 | PUB-03 | Phase 2 | Pending |
-| PUB-04 | Phase 2 | Pending |
+| PUB-04 | Phase 2 | Complete |
 | PUB-05 | Phase 2 | Pending |
 | PUB-06 | Phase 2 | Complete |
 | SHARE-01 | Phase 2 | Complete |

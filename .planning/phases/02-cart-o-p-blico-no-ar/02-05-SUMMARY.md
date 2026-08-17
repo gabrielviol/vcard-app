@@ -34,25 +34,26 @@ key-decisions:
   - "Task 1 (external account provisioning) treated as already satisfied from a prior session -- Neon/Render/Vercel/cron-job.org accounts confirmed, domain (BRAND-01) explicitly deferred by user choice and logged in STATE.md; not re-asked in this run"
   - "Migration applied directly via dotnet ef database update from the dev machine against Neon, with placeholder (non-secret) values for JWT_SECRET/Jwt__Issuer/Jwt__Audience/Cors__WebOrigin passed only as session env vars -- these 4 are required by dotnet ef's design-time host build (which goes through Program.cs) even though they have no bearing on the migration itself"
 
-requirements-completed: []
-# PUB-04 and BRAND-01 are NOT marked complete: PUB-04 requires the live Render deploy +
-# cron-job.org keep-alive confirmation from Task 3 (not yet executed, human-dashboard-only);
-# BRAND-01 remains explicitly deferred per STATE.md.
+requirements-completed: [PUB-04]
+# PUB-04 is now complete: Task 3 confirmed the live Render deploy responding on /health
+# with database up, and the cron-job.org keep-alive executing every 5 minutes with 200s.
+# BRAND-01 remains NOT complete -- explicitly deferred by user choice per STATE.md; the
+# domain was never registered in this plan, only the backend infra it points at.
 
 # Metrics
-duration: ~25min (Task 2 execution: Dockerfile authoring, Docker Desktop cold start, build, migration, runbook)
+duration: ~25min (Task 2) + Task 3 human-dashboard verification (Render deploy + cron-job.org setup)
 completed: 2026-08-17
 ---
 
 # Phase 2 Plan 5: Backend no Ar (Render + Neon + Keep-alive) Summary
 
-**apps/api containerizado (multi-stage .NET 10 Docker build) e o schema InitialSchema aplicado no Postgres de produção (Neon); runbook docs/DEPLOY.md versionado sem segredos. Backend ainda não está publicamente no ar -- isso depende de Task 3 (checkpoint humano no dashboard do Render + cron-job.org).**
+**apps/api containerizado (multi-stage .NET 10 Docker build), publicado no Render em `https://vcard-app-tihd.onrender.com` contra um Postgres Neon de produção (schema InitialSchema migrado), com keep-alive externo via cron-job.org a cada 5 minutos; runbook docs/DEPLOY.md versionado sem segredos.**
 
 ## Performance
 
-- **Tasks:** 2/3 completed this run (Task 1 já estava satisfeito de sessão anterior; Task 2 completo; Task 3 é checkpoint bloqueante para o usuário)
+- **Tasks:** 3/3 completed (Task 1 satisfeito de sessão anterior; Task 2 e Task 3 completos nesta execução)
 - **Files created:** 3 (`apps/api/Dockerfile`, `apps/api/.dockerignore`, `docs/DEPLOY.md`)
-- **Verification:** `docker build` exit 0; runtime image confirmed to contain `Microsoft.AspNetCore.App 10.0.11`; all Dockerfile/`.dockerignore`/`docs/DEPLOY.md` acceptance-criteria greps pass; `grep -rE "postgres://|npg_|password="` across `docs/` and `apps/api/Dockerfile` returns no matches; Neon migration confirmed idempotent (`dotnet ef database update` re-run reports "already up to date")
+- **Verification:** `docker build` exit 0; runtime image confirmed to contain `Microsoft.AspNetCore.App 10.0.11`; all Dockerfile/`.dockerignore`/`docs/DEPLOY.md` acceptance-criteria greps pass; `grep -rE "postgres://|npg_|password="` across `docs/` and `apps/api/Dockerfile` returns no matches; Neon migration confirmed idempotent (`dotnet ef database update` re-run reports "already up to date"); Task 3: live `/health` and `/public/cards/...` curl outputs confirmed, cron-job.org execution history confirmed by user
 
 ## Accomplishments
 
@@ -76,12 +77,26 @@ Per explicit instruction from the resuming session, Task 1's checkpoint outputs 
 - Applied the `20260814015302_InitialSchema` migration to the Neon production database: `dotnet restore Api.csproj` (fresh worktree had no `obj/project.assets.json`), then `dotnet ef database update --project Api.csproj --connection "<Neon connection string, session env var only>"`. Confirmed idempotent by re-running the same command, which reported "No migrations were applied. The database is already up to date." The full `CREATE TABLE` output during the first run showed all 4 tables (`users`, `cards`, `card_views`, `social_links`) plus their indexes and foreign keys created exactly as in the migration file.
 - `docs/DEPLOY.md` (136 lines) -- production runbook in Portuguese: Topologia, tabela de variáveis de ambiente do Render (todas as 5 chaves lidas eagerly por `Program.cs` + `ASPNETCORE_HTTP_PORTS`), tabela de variáveis da Vercel, passo a passo de criação do Web Service, seção de Migrations (comando exato, nota sobre as 4 env vars extras exigidas pelo `dotnet ef` design-time host), seção de Keep-alive (justificativa do intervalo de 5 min, alternativas descartadas, fallback GitHub Actions), tabela de Cold start esperado, e procedimento de Rotação de `JWT_SECRET`.
 
+### Task 3 (this run -- executed by the user in the Render and cron-job.org dashboards, verified in conversation with the orchestrating session)
+
+- **Render Web Service** created and deployed at `https://vcard-app-tihd.onrender.com` -- root directory `apps/api`, Dockerfile path `Dockerfile` (relative to root directory; see deployment pitfall below), runtime Docker, plano Free, health check path `/health`.
+- **Deployment pitfall (recorded in `docs/DEPLOY.md` for future re-deploys):** Render's "Dockerfile Path" field is relative to "Root Directory", not to the repo root. Setting Root Directory to `apps/api` **and** Dockerfile Path to `apps/api/Dockerfile` (i.e. treating both fields as repo-root-relative) produces a double-path build error: `lstat .../apps/api/apps: no such file or directory`. Fix: with Root Directory `apps/api`, Dockerfile Path must be just `Dockerfile`.
+- **Live verification (curl, literal output from the session):**
+  - `curl -i https://vcard-app-tihd.onrender.com/health` -> `HTTP/1.1 200 OK`, body `{"status":"ok","database":"up"}`.
+  - `curl -i https://vcard-app-tihd.onrender.com/public/cards/slug-que-nao-existe` -> `HTTP/1.1 404 Not Found` (confirmed not `401` -- the public route is outside the authorized group, per T-02-24/PUB-06 precedent from plan 02-03).
+- **`JWT_SECRET`** confirmed by the user as a newly generated random value on Render, distinct from the dev/test secret and from `TestAppFactory.TestJwtSecret`.
+- **Keep-alive:** cron-job.org cronjob created targeting `GET https://vcard-app-tihd.onrender.com/health` every 5 minutes. User checked the cron-job.org execution history and reported (verbatim, in Portuguese): "um monte tudo status 200" ("a bunch, all status 200"). This is the user's own informal description, not an exact count or a captured screenshot/timestamped log -- recorded honestly as user-reported verification without fabricated precision, following the same pattern used in `02-03-SUMMARY.md` for sign-off without individually captured evidence.
+
 ## Task Commits
 
 1. **Task 2: Dockerfile, .dockerignore, DEPLOY.md, Neon migration**
    - `efdfc63` feat(02-05): containerize apps/api and migrate Neon production schema
 
 Task 1 produced no code changes (external provisioning only) -- its outputs are the Neon connection string (session-only, never committed) and account confirmations, already logged in `.planning/STATE.md` from the prior session (`b264b7c`).
+
+2. **Task 3: Record Render Dockerfile Path pitfall in the runbook**
+   - `f17323d` docs(02-05): record Render Dockerfile Path pitfall from Task 3 deploy
+   - Task 3 itself produced no application code changes (external dashboard configuration only: Render Web Service, cron-job.org cronjob); the one artifact change it surfaced is the `docs/DEPLOY.md` pitfall note above.
 
 **Plan metadata:** committed alongside this SUMMARY (worktree mode -- orchestrator handles STATE.md/ROADMAP.md after merge).
 
@@ -138,32 +153,34 @@ Task 1 produced no code changes (external provisioning only) -- its outputs are 
 
 None beyond the deviations documented above.
 
-## User Setup Required (Task 3 -- NOT executed, checkpoint reached)
+## Task 3 Checkpoint -- Completed (human-verified in the Render and cron-job.org dashboards)
 
-Task 3 (`type="checkpoint:human-verify"`, `gate="blocking"`) requires the human to click through the Render and cron-job.org dashboards -- no API token is available to automate this. See the parent session's response for the full step-by-step instructions relayed to the user, built directly from `docs/DEPLOY.md`'s "Criação do Web Service no Render" and "Keep-alive" sections:
+Task 3 (`type="checkpoint:human-verify"`, `gate="blocking"`) required the human to click through the Render and cron-job.org dashboards -- no API token was available to automate this. All 7 `<how-to-verify>` steps were completed by the user, relayed and confirmed in conversation with the orchestrating session:
 
-1. Create the Render Web Service (Docker runtime, root directory `apps/api`, Dockerfile `apps/api/Dockerfile`, Free plan, health check path `/health`).
-2. Fill in the 6 env vars from `docs/DEPLOY.md`'s Render table (`ConnectionStrings__Default`, `JWT_SECRET` -- a **new** random 32+ byte value, never the dev/test one --, `Jwt__Issuer=vcard-api`, `Jwt__Audience=vcard-web`, `Cors__WebOrigin` -- provisional `*.vercel.app` value acceptable now --, `ASPNETCORE_HTTP_PORTS=8080`).
-3. After first deploy, run `curl -i https://<render-url>/health` (expect `200` + `"database":"up"`) and `curl -i https://<render-url>/public/cards/slug-que-nao-existe` (expect `404`, not `401`).
-4. Create a cron-job.org cronjob: `GET https://<render-url>/health`, 5-minute interval.
-5. After ~30 minutes, confirm ≥5 consecutive 200s in the cron-job.org execution history with no 30-60s latency spikes.
-6. Record the Render public URL for plan `02-06`'s `NEXT_PUBLIC_API_URL`.
+1. Render Web Service created (Docker runtime, root directory `apps/api`, Dockerfile path `Dockerfile`, Free plan, health check path `/health`) at `https://vcard-app-tihd.onrender.com`.
+2. All required env vars filled in on Render, including a newly generated `JWT_SECRET` (32+ bytes, confirmed distinct from dev/test values).
+3. `curl -i https://vcard-app-tihd.onrender.com/health` → `HTTP/1.1 200 OK`, `{"status":"ok","database":"up"}`.
+4. `curl -i https://vcard-app-tihd.onrender.com/public/cards/slug-que-nao-existe` → `HTTP/1.1 404 Not Found` (not `401`).
+5. cron-job.org cronjob created: `GET https://vcard-app-tihd.onrender.com/health`, 5-minute interval.
+6. Execution history checked by the user, reported informally as "um monte tudo status 200" ("a bunch, all status 200") -- no exact count or screenshot captured; recorded honestly per this project's established sign-off pattern (see `02-03-SUMMARY.md`).
+7. Render public URL recorded for plan `02-06`'s `NEXT_PUBLIC_API_URL`: `https://vcard-app-tihd.onrender.com`.
 
-PUB-04 and the "backend publicly reachable" truth are not yet satisfied -- both depend on this checkpoint's outputs.
+PUB-04 and the "backend publicly reachable" truth are now satisfied. BRAND-01 remains deferred (domain not registered) -- see `.planning/STATE.md`.
 
 ## Next Phase Readiness
 
-- `apps/api/Dockerfile` is validated and ready for Render to build directly from the repo -- no further code changes needed for Task 3.
+- `apps/api/Dockerfile` is validated, deployed, and live on Render.
 - Neon schema is live and confirmed idempotent against re-migration.
-- `docs/DEPLOY.md` is the single source of truth Task 3 (and any future re-deploy) should follow.
-- Plan `02-06` is blocked on Task 3's Render URL (`NEXT_PUBLIC_API_URL`) and on the still-deferred domain decision (`NEXT_PUBLIC_APP_URL` provisional value acceptable per D-15).
+- `docs/DEPLOY.md` is the single source of truth for any future re-deploy, including the Render Dockerfile Path pitfall recorded from this run.
+- Plan `02-06` is now unblocked: its only dependency (`02-05`) is complete. It consumes `NEXT_PUBLIC_API_URL=https://vcard-app-tihd.onrender.com` and still uses the provisional `*.vercel.app` value for `NEXT_PUBLIC_APP_URL` (domain decision, BRAND-01, remains deferred per D-15 -- no code cost to swap later).
 
 ---
 *Phase: 02-cart-o-p-blico-no-ar*
-*Completed: Task 2 only -- 2026-08-17 (Task 3 checkpoint pending human dashboard actions)*
+*Completed: 2026-08-17 (Task 1 satisfied prior session, Tasks 2 and 3 this session -- plan fully complete)*
 
 ## Self-Check: PASSED
 
 All claimed files verified present: `apps/api/Dockerfile`, `apps/api/.dockerignore`, `docs/DEPLOY.md`, this SUMMARY.md.
-All claimed commit hashes verified present in git log: `efdfc63`.
+All claimed commit hashes verified present in git log: `efdfc63` (Task 2); `f17323d` (Task 3 -- DEPLOY.md Render Dockerfile Path pitfall note).
 Neon migration state verified via `dotnet ef migrations list --connection` showing `20260814015302_InitialSchema` applied, and a repeat `dotnet ef database update` reporting no pending migrations.
+Task 3 outputs (curl responses, Render URL, JWT_SECRET distinctness, cron-job.org confirmation) are user-reported from live dashboard/CLI actions in the orchestrating session -- not independently re-verified by this agent, consistent with this plan's `checkpoint:human-verify` gate design.

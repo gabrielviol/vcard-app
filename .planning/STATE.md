@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Session resumed, proceeding to execute Phase 2
-last_updated: "2026-08-15T12:13:34.053Z"
-last_activity: 2026-08-15 -- Phase 02 execution started
+stopped_at: 02-05 completo (backend no Render + Neon + keep-alive); pronto para 02-06
+last_updated: "2026-08-17T19:34:21.051Z"
+last_activity: 2026-08-17 -- 02-05 Task 3 completed (backend live on Render, cron-job.org keep-alive active)
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 13
-  completed_plans: 7
-  percent: 25
+  completed_plans: 12
+  percent: 92
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-08-13)
 ## Current Position
 
 Phase: 02 (cart-o-p-blico-no-ar) — EXECUTING
-Plan: 1 of 6
-Status: Executing Phase 02
-Last activity: 2026-08-15 -- Phase 02 execution started
+Plan: 6 of 6
+Status: 02-05 complete (Render + Neon + keep-alive live). Ready to execute 02-06 (Vercel deploy).
+Last activity: 2026-08-17 -- 02-05 Task 3 completed (backend live on Render, cron-job.org keep-alive active)
 
-Progress: [████░░░░░░] 43%
+Progress: [█████████░] 92%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [████░░░░░░] 43%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 02 P05 | 30min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,7 @@ Recent decisions affecting current work:
 - Roadmap: cartão público + ISR + pré-aquecimento + QR ficam num único bloco (Fase 2) — separar criaria falsa sensação de "pronto" antes de resolver cold start.
 - Roadmap: BRAND-01 (domínio) entra na Fase 2, não na fase final — evita bloquear o rodapé de marca/upgrade (Fase 4) e reconhece que registrar domínio é ação com lead time.
 - Roadmap: validações de Pix (CARD-06/07) e normalização de WhatsApp (CARD-08) ficam na mesma fase que cria esses campos (Fase 1) — barato ali, caro depois.
+- [Phase 02]: Backend .NET em producao no Render (vcard-app-tihd.onrender.com), containerizado, respondendo /health com banco Neon acordado; keep-alive cron-job.org ativo a cada 5 min. PUB-04 concluido; BRAND-01 permanece deferido (dominio nao registrado).
 
 ### Pending Todos
 
@@ -91,6 +93,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-08-15T00:00:00.000Z
-Stopped at: Session resumed, proceeding to execute Phase 2
-Resume file: .planning/phases/02-cart-o-p-blico-no-ar/02-UI-SPEC.md
+Last session: 2026-08-17T19:34:21.033Z
+Stopped at: 02-05 completo (backend no Render + Neon + keep-alive); pronto para 02-06
+Resume file: .planning/phases/02-cart-o-p-blico-no-ar/02-06-PLAN.md
