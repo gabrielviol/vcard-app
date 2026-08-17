@@ -62,6 +62,13 @@ publicado.
    (o app falha no startup se qualquer uma das 5 obrigatórias estiver
    ausente, por causa das leituras eager com `?? throw`).
 
+> **Pitfall:** o campo "Dockerfile Path" do Render é relativo ao "Root
+> Directory", não à raiz do repositório. Com Root Directory `apps/api`, o
+> Dockerfile Path correto é **`Dockerfile`** (não `apps/api/Dockerfile`).
+> Preencher os dois campos como se fossem relativos à raiz do repo produz um
+> caminho duplicado e o build falha com
+> `lstat .../apps/api/apps: no such file or directory`.
+
 ## Migrations
 
 O `apps/api/Program.cs` **não** chama `db.Database.Migrate()` no startup —
