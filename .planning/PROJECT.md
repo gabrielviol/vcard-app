@@ -17,13 +17,13 @@ Alguém recebe o cartão (por QR ou link) e consegue **te chamar ou te pagar em 
 - [x] Cadastro, login e sessão via JWT (specs 01/02 já escritas) — Phase 1
 - [x] Dono cria e edita seu cartão pelo dashboard (nome, cargo, empresa, foto, contatos) — Phase 1
 - [x] Links sociais ordenáveis (Instagram, LinkedIn, Twitter, TikTok, YouTube, site) — Phase 1
+- [x] Cartão público acessível por slug próprio, renderizado rápido em celular (ISR + pré-aquecimento + keep-alive) — Phase 2
+- [x] QR code gerado do cartão, exibível na tela e baixável para impressão (SVG + PNG) — Phase 2
 
 ### Active
 
-- [ ] Cartão público acessível por slug próprio (ex: `/gabriel`), renderizado rápido em celular
 - [ ] Botão de WhatsApp que abre conversa direta com o dono do cartão
 - [ ] Chave Pix copiável em um toque na página pública
-- [ ] QR code gerado do cartão, exibível na tela e baixável para impressão
 - [ ] Preview de link (OG image + título) correto quando o cartão é compartilhado no WhatsApp
 - [ ] Botão "salvar contato" que baixa o `.vcf` com os dados do cartão
 - [ ] Registro de visualizações do cartão (`CardView`) e contagem visível pro dono
@@ -71,7 +71,7 @@ Alguém recebe o cartão (por QR ou link) e consegue **te chamar ou te pagar em 
 - **Arquitetura**: validação rápida vale mais que robustez agora. Camadas simples (Endpoints/Services/Data), sem abstração especulativa.
 - **Custo**: free tier em tudo (Vercel, Render com cold start aceito, Neon/Supabase) — o produto não pode custar dinheiro antes de gerar.
 - **Mobile-first**: quem recebe o cartão abre no celular, quase sempre vindo de câmera de QR ou de app de mensagem. Desktop é secundário.
-- **Pendência bloqueante**: o produto não tem nome nem domínio. Isso trava a marca do rodapé (`is_branded`) e a URL pública — precisa ser resolvido antes do cartão ir pro ar.
+- **Nome e domínio ainda não definidos (BRAND-01), deferido por escolha do usuário**: o cartão já está no ar em produção (Fase 2) usando a URL provisória `https://vcard-app-one.vercel.app` — a troca por um domínio próprio quando registrado tem custo zero de código (D-15), documentada em `docs/DEPLOY.md`, seção "Trocar o domínio". Continua travando a marca do rodapé (`is_branded`, Fase 4) até ser resolvido, mas não bloqueia mais o cartão estar acessível publicamente.
 
 ## Key Decisions
 
@@ -85,6 +85,8 @@ Alguém recebe o cartão (por QR ou link) e consegue **te chamar ou te pagar em 
 | Stack Next.js + .NET + Postgres | Stack que o dev já domina no dia a dia — velocidade importa mais que escolha ótima na janela curta. | Confirmado — Phase 1 (7 planos) construído e testado nessa stack sem atrito, 90/90 xUnit + 54/54 Vitest verdes |
 | 1 cartão por usuário na v1 | Múltiplos cartões é feature do plano pago; o schema já suporta, então não há custo em adiar. | Confirmado — índice único em `cards.user_id`, erro `card_exists` distinto de `slug_taken` na criação (Phase 1, WR-01) |
 | Monorepo sem ferramenta de workspace | Dois projetos de linguagens diferentes; Turborepo/Lerna não agregam. | Confirmado — `apps/web` e `apps/api` convivem sem fricção via 7 planos da Phase 1 |
+| ISR (`revalidate=60`) para o cartão público, em vez de SSR puro | Defasagem de até 60s entre salvar e o público ver é aceitável; ISR reduz invocações de function e responde mais rápido no caso de uso mobile via QR. | Confirmado — Phase 2, página `/[slug]` servindo do edge sem depender do backend estar acordado a cada visita |
+| Deploy em produção com URL provisória `*.vercel.app`, sem esperar registro de domínio | BRAND-01 (nome/domínio) segue indefinido; esperar bloquearia o cartão de ir ao ar. D-15 já proibia hardcode de URL, então a troca futura tem custo zero de código. | Confirmado — Phase 2 (plano 02-06) executado inteiro sobre `https://vcard-app-one.vercel.app`; procedimento de troca documentado em `docs/DEPLOY.md` |
 
 ## Evolution
 
@@ -104,4 +106,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-14 after Phase 1 (Conta e Cartão) completion*
+*Last updated: 2026-08-18 after Phase 2 (Cartão Público no Ar) completion*
