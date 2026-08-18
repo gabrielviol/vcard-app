@@ -1,0 +1,39 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-08-18T01:58:42.169Z",
+  "phase": "02",
+  "phase_name": "cart-o-p-blico-no-ar",
+  "phase_dir": ".planning/phases/02-cart-o-p-blico-no-ar",
+  "plan": 6,
+  "task": 1,
+  "total_tasks": 3,
+  "status": "paused",
+  "completed_tasks": [
+    {"id": "02-01", "name": "Public card endpoint + /[slug] page", "status": "done", "commit": "merged wave 1"},
+    {"id": "02-02", "name": "QR code route (SVG/PNG)", "status": "done", "commit": "merged wave 1"},
+    {"id": "02-03", "name": "Branded 404 + error boundary", "status": "done", "commit": "020d7f5"},
+    {"id": "02-04", "name": "QR in dashboard + prewarm on save", "status": "done", "commit": "04194f9"},
+    {"id": "02-05", "name": "Containerize apps/api, migrate Neon, deploy Render, activate keep-alive", "status": "done", "commit": "fdaa6ce (Task 3 close-out); efdfc63 (Task 2)"},
+    {"id": "02-06 Task 1", "name": "Deploy apps/web to Vercel, point custom domain", "status": "in_progress", "progress": "Adapted mid-task: user has NOT registered a domain (BRAND-01 deferred), so this task is proceeding WITHOUT the domain/DNS steps in the plan text -- confirmed explicitly with user via AskUserQuestion (chose 'Deploy com URL *.vercel.app provisória'). Vercel project imported (root apps/web), deployed, got URL https://vcard-app-one.vercel.app. NEXT_PUBLIC_API_URL set to https://vcard-app-tihd.onrender.com. User was instructed to: (1) set NEXT_PUBLIC_APP_URL=https://vcard-app-one.vercel.app on Vercel and redeploy, (2) update Render's Cors__WebOrigin to https://vcard-app-one.vercel.app and redeploy, (3) test login+save on the new domain for CORS errors. User has NOT yet confirmed these 3 steps are done -- session was paused right after giving these instructions, before any confirmation came back."}
+  ],
+  "remaining_tasks": [
+    {"id": "02-06 Task 1", "name": "Confirm Vercel NEXT_PUBLIC_APP_URL set + redeployed, Render Cors__WebOrigin updated + redeployed, login+save works on new domain with no CORS console errors", "status": "in_progress"},
+    {"id": "02-06 Task 2", "name": "Update docs/DEPLOY.md with real Vercel/DNS state + go-live checklist (type=auto, but note: DNS section should be adapted/skipped or marked deferred since no custom domain exists yet)", "status": "not_started"},
+    {"id": "02-06 Task 3", "name": "End-to-end verification in production (type=checkpoint:human-verify) -- ADAPT: plan text assumes a custom domain; since domain is deferred, verify against https://vcard-app-one.vercel.app instead, and treat BRAND-01 checklist item as explicitly deferred/not-applicable rather than failing it", "status": "not_started"}
+  ],
+  "blockers": [
+    {"description": "02-06 Task 1 waiting on user to finish the Vercel NEXT_PUBLIC_APP_URL redeploy + Render Cors__WebOrigin redeploy + confirm no CORS errors on login/save at https://vcard-app-one.vercel.app", "type": "human_action", "workaround": "none -- needs the user to click through both dashboards and report back"},
+    {"description": "BRAND-01 domain registration still deferred by user choice (unchanged since plan 02-05) -- logged in STATE.md Blockers/Concerns", "type": "human_action", "workaround": "Deploy proceeds on *.vercel.app / *.onrender.com URLs. Domain swap is a zero-code-change env var update later (D-15)."}
+  ],
+  "human_actions_pending": [
+    {"action": "On Vercel: Settings -> Environment Variables -> set NEXT_PUBLIC_APP_URL = https://vcard-app-one.vercel.app (no trailing slash), then Deployments -> redeploy latest", "context": "apps/web reads this for QR generation (lib/qr.ts) and prewarm (lib/prewarm.ts)", "blocking": true},
+    {"action": "On Render (vcard-app-tihd service): Environment -> set Cors__WebOrigin = https://vcard-app-one.vercel.app (exact origin, no trailing slash, never *), confirm redeploy triggers", "context": "apps/api Program.cs uses policy.WithOrigins(webOrigin) with a single allowed origin -- browser-side authenticated dashboard calls will be CORS-blocked otherwise", "blocking": true},
+    {"action": "Test login + save an edit at https://vcard-app-one.vercel.app/login and confirm no CORS error in browser console", "context": "Acceptance criteria for 02-06 Task 1", "blocking": true}
+  ],
+  "decisions": [
+    {"decision": "Proceed with plan 02-06 using the provisional https://vcard-app-one.vercel.app URL instead of a registered custom domain", "rationale": "Domain registration (BRAND-01) remains deferred by user choice (same decision as plan 02-05). User was asked explicitly via AskUserQuestion whether to deploy with a provisional Vercel URL now or pause until a domain is registered; chose to proceed now. Consequence acknowledged: QR codes generated against this URL will need to be reprinted later once/if a real domain is registered and NEXT_PUBLIC_APP_URL changes -- this is explicitly documented in the plan's own 'Trocar o domínio' section as the real cost of a later domain swap.", "phase": "02"}
+  ],
+  "uncommitted_files": [],
+  "next_action": "When the user confirms the Vercel redeploy + Render Cors__WebOrigin redeploy are done and login/save works without CORS errors, close out 02-06 Task 1 manually (it's a checkpoint:human-action the orchestrating session walks the user through directly -- no executor agent needed for this task, since it's pure dashboard clicking). Then spawn a gsd-executor (isolation=worktree, base off current main HEAD) for Task 2 (update docs/DEPLOY.md -- adapt the DNS section since no custom domain exists, mark BRAND-01 as deferred in the go-live checklist rather than fabricating a domain). Then walk the user through Task 3's end-to-end verification interactively (adapted to use https://vcard-app-one.vercel.app in place of {D} throughout, and treat BRAND-01's curl/TLS check as explicitly skipped/deferred rather than failed), collecting the literal curl outputs and timing numbers the plan's acceptance_criteria requires, before writing 02-06-SUMMARY.md and closing the phase.",
+  "context_notes": "Phase 2 is on its last plan. 02-01 through 02-05 are fully done, merged, and pushed to origin/main (repo now lives at https://github.com/gabrielviol/vcard-app, default branch renamed master->main this session). 02-06 as originally written assumes the domain from 02-05 already exists -- it doesn't, by user choice, so this plan is being executed with an explicit, user-confirmed adaptation: deploy to Vercel now with the auto-generated *.vercel.app URL as the de facto production URL, skip all DNS/registro.br steps, and treat domain registration as a fully separate future action with zero code cost when it happens. Nothing is broken -- this is a clean pause point mid-Task-1, waiting purely on the user finishing two dashboard edits (Vercel env var + Render CORS) and reporting back with a CORS-free login/save test. The gsd-executor worktree-merge-cleanup pattern established for 02-05 (spawn isolation=worktree, fast-forward merge into main, delete worktree branch, push) should be reused for Task 2 of this plan."
+}
